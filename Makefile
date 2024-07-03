@@ -7,10 +7,15 @@ LIB = -L$(LIBFT_PATH) -lft
 INC = -I$(LIBFT_PATH) -I$I
 
 SRC = \
-	minishell.c \
-	data_utils.c \
-	env_utils.c \
-	cmds.c
+	$Sminishell.c \
+	$Sdata_utils.c \
+	$Sdata_format.c \
+	$Scmds.c \
+	$Sexec.c \
+	$Senv_utils.c \
+	$Sexp_utils.c \
+	$Spipe_utils.c \
+	$Sredir_utils.c
 
 OBJ = $(SRC:$S%.c=$O%.o)
 

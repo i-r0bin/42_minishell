@@ -62,7 +62,7 @@ char *get_env(char *key, t_list *env)
     len = 0;
     if (*key == '$')
         key++;;
-    while (key[len] != '\0' && key[len] != '/')
+    while (key[len] != '\0' && key[len] != '/' && key[len] != ' ')
         len++;
     while (tmp)
     {
@@ -89,7 +89,7 @@ void set_env(char *key, char *value, t_list *env)
             free(map[1]);
             map[1] = (char *)malloc(ft_strlen(value) + 1);
             ft_strlcpy(map[1], value, ft_strlen(value) + 1);
-            return;
+            break;
         }
         tmp = tmp->next;
     }
@@ -145,4 +145,3 @@ void free_env_content(t_list *env)
     free(&env->content[1]);
     free(env->content);
 }
-

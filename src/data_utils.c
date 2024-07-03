@@ -60,7 +60,7 @@ void parse_line(t_data *data)
     int i;
 
     data->cmd = ft_strtrim(data->line, " ");
-    data->args = ft_split(data->cmd, ' ');
+    data->args = split_cmd(data->cmd);
     if (ft_strchr(data->cmd, '>') || ft_strchr(data->cmd, '<'))
         exec_redirection(data);
     else
