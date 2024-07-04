@@ -12,8 +12,8 @@ void print_export(t_data *data)
     while (c < ft_lstsize(data->env))
     {
         tmp = get_next_sorted_var(data->env, last);
-        last = &tmp->content[0];
-        if (&tmp->content[1] != '\0')
+        last = ((char **)tmp->content)[0];
+        if (*((char **)tmp->content)[1] != '\0')
             write_exp_var(tmp);
         c++;
     }
@@ -22,8 +22,8 @@ void print_export(t_data *data)
     while (c < ft_lstsize(data->env))
     {
         tmp = get_next_sorted_var(data->env, last);
-        last = &tmp->content[0];
-        if (&tmp->content[1] == '\0')
+        last = ((char **)tmp->content)[0];
+        if (*((char **)tmp->content)[1] == '\0')
             write_exp_var(tmp);
         c++;
     }
@@ -32,11 +32,11 @@ void print_export(t_data *data)
 void write_exp_var(t_list *var)
 {
     ft_putstr_fd("declare -x ", 1);
-    ft_putstr_fd(&var->content[0], 1);
-    if (&var->content[1] != '\0')
+    ft_putstr_fd(((char **)var->content)[0], 1);
+    if (*((char **)var->content)[1] != '\0')
     {
-        ft_putstr_fd('=\"', 1);
-        ft_putstr_fd(&var->content[1], 1);
+        ft_putstr_fd("=\"", 1);
+        ft_putstr_fd(((char **)var->content)[1], 1);
         ft_putendl_fd("\"", 1);
     }
     else
@@ -47,17 +47,15 @@ t_list *get_next_sorted_var(t_list *env, char *last)
 {
     t_list *tmp;
     t_list *min;
-    int i;
 
-    i = 0;
     min = NULL;
     tmp = env;
     while (tmp)
     {
-        if (!last || ft_strncmp(&tmp->content[0], last, ft_strlen(last)) > 0)
+        if (!last || ft_strncmp(((char **)tmp->content)[0], last, ft_strlen(last)) > 0)
         {
-            if (!min || ft_strncmp(&tmp->content[0], &min->content[0], 
-                ft_strlen(&min->content[0])) < 0)
+            if (!min || ft_strncmp(((char **)tmp->content)[0], ((char **)min->content)[0], 
+                ft_strlen(((char **)min->content)[0])) < 0)
                 min = tmp;
         }
         tmp = tmp->next;
@@ -65,16 +63,16 @@ t_list *get_next_sorted_var(t_list *env, char *last)
     return (min);
 }
 
+//serve davvero questa funzione?
 void set_env_exp(char *key, t_list *env)
 {
     t_list *tmp;
     int len;
-    char **map;
  
     tmp = env;
     len = ft_strlen(key);
-    while (tmp && ft_strncmp(key, &tmp->content[0], len) != 0)
+    while (tmp && ft_strncmp(key, ((char **)tmp->content)[0], len) != 0)
         tmp = tmp->next;
     if (!tmp)
-        add_env(key, NULL, env);
+        add_env(key, NULL, env, "1");
 }

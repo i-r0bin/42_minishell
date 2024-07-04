@@ -3,7 +3,7 @@ O = obj/
 I = ./
 LIBFT_PATH = ./libft
 LIBFT = $(LIBFT_PATH)/libft.a
-LIB = -L$(LIBFT_PATH) -lft
+LIB = -L$(LIBFT_PATH) -lft -lreadline -lncurses
 INC = -I$(LIBFT_PATH) -I$I
 
 SRC = \

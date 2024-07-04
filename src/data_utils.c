@@ -2,9 +2,10 @@
 
 void init_data(t_data *data, char **env)
 {
+    data->env = NULL;
     while(env && *env)
     {
-        set_env(data, *env);
+        set_env(*env, data->env, "0");
         env++;
     }
     if (!data->env)
@@ -34,7 +35,7 @@ void free_data(t_data *data)
     }
     if (data->env)
     {
-        ft_lstiter(data->env, free_env_node);
+        ft_lstiter(data->env, &free_env_node);
         free(data->env);
     }
     if (data->pipe)
@@ -49,7 +50,7 @@ void free_data(t_data *data)
         free(data->fd_pipe);
 }
 
-void free_env_node(t_list *env)
+void free_env_node(void *env)
 {
     free_env_content(env);
     free(env);
@@ -57,17 +58,14 @@ void free_env_node(t_list *env)
 
 void parse_line(t_data *data)
 {
-    int i;
+    //int i;
 
     data->cmd = ft_strtrim(data->line, " ");
     data->args = split_cmd(data->cmd);
-    if (ft_strchr(data->cmd, '>') || ft_strchr(data->cmd, '<'))
-        exec_redirection(data);
-    else
-        exec_cmd(data);
     if (data->args)
     {
-        i = 0;
+        // ancora da capire cosa gestire prima e dopo (pipe, redir, comando)
+        /*i = 0;
         while(data->args[i])
         {
             if (ft_strncmp(data->args[i], "<<", 2) == 0 || ft_strncmp(data->args[i], ">>", 2) == 0 
@@ -82,23 +80,27 @@ void parse_line(t_data *data)
                     exec_redirection(data);
             }
             i++;
-        }
-        if (ft_strncmp(data->args[0], "exit", 4) == 0)
-            data->exit = 1;
-        else if (ft_strncmp(data->args[0], "cd", 2) == 0)
-            ft_cd(data);
-        else if (ft_strncmp(data->args[0], "pwd", 3) == 0)
-            ft_pwd(data);
-        else if (ft_strncmp(data->args[0], "echo", 4) == 0)
-            ft_echo(data);
-        else if (ft_strncmp(data->args[0], "export", 5) == 0)
-            ft_export(data);
-        else if (ft_strncmp(data->args[0], "unset", 5) == 0)
-            ft_unset(data);
-        else if (ft_strncmp(data->args[0], "env", 3) == 0)
-            ft_env(data);
-        else
-            exec_cmd(data);
+        }*/
+        exec_cmd(data);
     }
 }
 
+void    exec_builtin(t_data *data)
+{
+    if (ft_strncmp(data->args[0], "exit", 4) == 0)
+        data->exit = 1;
+    else if (ft_strncmp(data->args[0], "cd", 2) == 0)
+        ft_cd(data);
+    else if (ft_strncmp(data->args[0], "pwd", 3) == 0)
+        ft_pwd(data);
+    else if (ft_strncmp(data->args[0], "echo", 4) == 0)
+        ft_echo(data);
+    else if (ft_strncmp(data->args[0], "export", 6) == 0)
+        ft_export(data);
+    else if (ft_strncmp(data->args[0], "unset", 5) == 0)
+        ft_unset(data);
+    else if (ft_strncmp(data->args[0], "env", 3) == 0)
+        ft_env(data);
+    else
+        exec_bin(data);
+}

@@ -2,13 +2,11 @@
 
 void exec_cmd(t_data *data)
 {
-    check_env(data);
-    if (ft_strchr(data->cmd, '|'))
-        exec_pipe(data);
-    else if (ft_strchr(data->cmd, '>') || ft_strchr(data->cmd, '<'))
+    if (ft_strchr(data->cmd, '>') || ft_strchr(data->cmd, '<'))
         exec_redirection(data);
-    else
-        exec_one(data);
+    else if (ft_strchr(data->cmd, '|'))
+        exec_pipe(data);
+    exec_builtin(data);
 }
 
 void exec_pipe(t_data *data)
@@ -34,7 +32,6 @@ void exec_pipe(t_data *data)
             i++;
         }
     }
-    free(fd);
     free(data->pipe);
 }
 
@@ -42,7 +39,6 @@ void exec_redirection(t_data *data)
 {
     int i;
 
-    check_env(data);
     i = 0;
     while (data->args[i])
     {
@@ -56,15 +52,16 @@ void exec_redirection(t_data *data)
             exec_here_documents(data, i);
         i++;
     }
-    exec_one(data);
+    exec_bin(data);
 }
 
-void exec_one(t_data *data)
+void exec_bin(t_data *data)
 {
     data->pid = fork();
     if (data->pid == 0)
     {
-        if (execve(data->args[0], data->args, data->env) == -1)
+        // al terzo parametro va array di stringhe estratto da lista data->env
+        if (execve(data->args[0], data->args, data->args) == -1)
         {
             ft_putstr_fd("minishell: ", 2);
             ft_putstr_fd(data->args[0], 2);

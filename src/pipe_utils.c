@@ -20,19 +20,18 @@ void set_fd_pipe(t_data *data, int fd[2], int i)
         close(data->fd_pipe[0]);
         close(data->fd_pipe[1]);
     }
-    
     data->fd_pipe[0] = fd[0];
     data->fd_pipe[1] = fd[1];
 }
 
 void exec_pipe_cmd(t_data *data, char *cmd)
 {
-    data->args = ft_split(ft_strtrim(cmd, " "), ' ');
+    data->args = split_cmd(ft_strtrim(cmd, " "));
     if (data->args)
     {
         if (ft_strchr(cmd, '>') || ft_strchr(cmd, '<'))
             exec_redirection(data);
         else
-            exec_one(data);
+            exec_cmd(data);
     }
 }

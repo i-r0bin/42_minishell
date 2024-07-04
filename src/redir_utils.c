@@ -65,7 +65,10 @@ void exec_here_documents(t_data *data, int index)
 void remove_redir_args(t_data *data, int index)
 {
     while (data->args[index + 2])
-        data->args[index] = data->args[2 + index++];
+    {
+        data->args[index] = data->args[2 + index];
+        index++;
+    }
     data->args[index++] = NULL;
     data->args[index] = NULL;
 }

@@ -26,7 +26,7 @@ void check_env(t_data *data)
                 if (data->args[i][j + 1] == '?')
                     env = ft_itoa(data->status);
                 else
-                    env = get_env(data->args[i][j], data->env);
+                    env = get_env(&(data->args)[i][j], data->env);
                 if (!full_arg)
                     tmp = (char *)malloc(j + ft_strlen(env) + 1);
                 else
@@ -66,51 +66,53 @@ char *get_env(char *key, t_list *env)
         len++;
     while (tmp)
     {
-        if (ft_strncmp(key, &tmp->content[0], len) == 0)
-            return (&tmp->content[1]);
+        if (ft_strncmp(key, ((char **)tmp->content)[0], len) == 0)
+            return (((char **)tmp->content)[1]);
         tmp = tmp->next;
     }
     return (NULL);
 }
 
-void set_env(char *key, char *value, t_list *env)
+void    set_env(char *arg, t_list *env, char *is_global)
 {
     t_list *tmp;
-    int len;
+    char *key;
+    char *value;
     char **map;
 
     tmp = env;
-    len = ft_strlen(key);
+    key = ft_strtrim(arg, " ");
+    value = ft_strchr(key, '=');
+    if (value)
+    {
+        *value = '\0';
+        value++;
+        if (!value)
+            value = "";
+    }
     while (tmp)
     {
-        if (ft_strncmp(key, &tmp->content[0], len) == 0)
+        if (ft_strncmp(key, ((char **)tmp->content)[0], ft_strlen(key)) == 0)
         {
             map = tmp->content;
             free(map[1]);
-            map[1] = (char *)malloc(ft_strlen(value) + 1);
-            ft_strlcpy(map[1], value, ft_strlen(value) + 1);
+            map[1] = ft_strdup(value);
             break;
         }
         tmp = tmp->next;
     }
     if (!tmp)
-        add_env(key, value, env);
+        add_env(key, value, env, is_global);
 }
 
-void add_env(char *key, char *value, t_list *env)
+void add_env(char *key, char *value, t_list *env, char *is_global)
 {
     char **map;
 
-    map = (char **)malloc(sizeof(char *) * 2);
-    map[0] = (char *)malloc(ft_strlen(key) + 1);
-    ft_strlcpy(map[0], key, ft_strlen(key) + 1);
-    if (value)
-    {
-        map[1] = ft_calloc(ft_strlen(value) + 1, sizeof(char));
-        ft_strlcpy(map[1], key, ft_strlen(value) + 1);
-    }
-    else
-        map[1] = NULL;
+    map = (char **)malloc(sizeof(char *) * 3);
+    map[0] = ft_strdup(key);
+    map[1] = ft_strdup(value);
+    map[2] = ft_strdup(is_global);
     ft_lstadd_back(&env, ft_lstnew(map));
 }
 
@@ -121,27 +123,28 @@ void unset_env(char *key, t_list *env)
 
     tmp = env;
     len = ft_strlen(key);
-    if (tmp && ft_strncmp(key, &tmp->content[0], len) == 0)
+    if (tmp && ft_strncmp(key, ((char **)tmp->content)[0], len) == 0)
     {
         env = tmp->next;
-        ft_lstdelone(tmp, free_env_content);
+        ft_lstdelone(tmp, &free_env_content);
         return;
     }
     while (tmp->next)
     {
-        if (ft_strncmp(key, &tmp->next->content[0], len) == 0)
+        if (ft_strncmp(key, ((char **)tmp->content)[0], len) == 0)
         {
             tmp->next = tmp->next->next;
-            ft_lstdelone(tmp->next, free_env_content);
+            ft_lstdelone(tmp->next, &free_env_content);
             return;
         }
         tmp = tmp->next;
     }
 }
 
-void free_env_content(t_list *env)
+void free_env_content(void *env)
 {
-    free(&env->content[0]);
-    free(&env->content[1]);
-    free(env->content);
+    free(((char **)((t_list *)env)->content)[0]);
+    free(((char **)((t_list *)env)->content)[1]);
+    free(((char **)((t_list *)env)->content)[2]);
+    free(((t_list *)env)->content);
 }

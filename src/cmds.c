@@ -29,6 +29,7 @@ void ft_echo(t_data *data)
         ft_putstr_fd("\n", 1);
 }
 
+//controllare se chdir gestisce sia relative che absolute path
 void ft_cd(t_data *data)
 {
     if (data->args[1])
@@ -46,7 +47,7 @@ void ft_cd(t_data *data)
         chdir(get_env("$HOME", data->env));
 }
 
-void ft_pwd(t_data *data)
+void ft_pwd()
 {
     char *cwd;
 
@@ -57,38 +58,16 @@ void ft_pwd(t_data *data)
 
 void ft_export(t_data *data)
 {
-    int i;
-    char *key;
-    char *value;
-
-    i = 1;
-    if (!data->args[i])
-        print_export(data);
-    while (data->args[i])
+    if (!data->args[1])
+    print_export(data);
+    if (data->args[1][0] == '=')
     {
-        if (data->args[i][0] == '=')
-        {
-            ft_putstr_fd("minishell: export: `", 2);
-            ft_putstr_fd(data->args[i], 2);
-            ft_putendl_fd("': not a valid identifier", 2);
-        }
-        else
-        {
-            key = ft_strtrim(data->args[i], " ");
-            value = ft_strchr(key, '=');
-            if (value)
-            {
-                *value = '\0';
-                value++;
-                if (!value)
-                    value = "";
-                set_env(key, value, data->env);
-            }
-            else
-                set_env_exp(key, data->env);
-            i++;
-        }
+        ft_putstr_fd("minishell: export: `", 2);
+        ft_putstr_fd(data->args[1], 2);
+        ft_putendl_fd("': not a valid identifier", 2);
     }
+    else
+        set_env(data->args[1], data->env, "1");
 }
 
 void ft_unset(t_data *data)
@@ -112,11 +91,11 @@ void ft_env(t_data *data)
     tmp = data->env;
     while (tmp)
     {
-        if (&tmp->content[1] != '\0')
+        if (((char *)tmp->content)[1] != '\0')
         {
-            ft_putstr_fd(&tmp->content[0], 1);
+            ft_putstr_fd(&((char *)tmp->content)[0], 1);
             ft_putchar_fd('=', 1);
-            ft_putendl_fd(&tmp->content[1], 1);
+            ft_putendl_fd(&((char *)tmp->content)[1], 1);
         }
         tmp = tmp->next;
     }
