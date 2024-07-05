@@ -73,21 +73,21 @@ char *get_env(char *key, t_list *env)
     return (NULL);
 }
 
-void    set_env(char *arg, t_list *env, char *is_global)
+void    set_env(char *arg, t_data *data, char *is_global)
 {
     t_list *tmp;
     char *key;
     char *value;
     char **map;
 
-    tmp = env;
+    tmp = data->env;
     key = ft_strtrim(arg, " ");
     value = ft_strchr(key, '=');
     if (value)
     {
         *value = '\0';
         value++;
-        if (!value)
+        if (*value == '\0')
             value = "";
     }
     while (tmp)
@@ -96,16 +96,19 @@ void    set_env(char *arg, t_list *env, char *is_global)
         {
             map = tmp->content;
             free(map[1]);
-            map[1] = ft_strdup(value);
+            if (value)
+                map[1] = ft_strdup(value);
+            else
+                map[1] = NULL;
             break;
         }
         tmp = tmp->next;
     }
     if (!tmp)
-        add_env(key, value, env, is_global);
+        add_env(key, value, data, is_global);
 }
 
-void add_env(char *key, char *value, t_list *env, char *is_global)
+void add_env(char *key, char *value, t_data *data, char *is_global)
 {
     char **map;
 
@@ -113,38 +116,37 @@ void add_env(char *key, char *value, t_list *env, char *is_global)
     map[0] = ft_strdup(key);
     map[1] = ft_strdup(value);
     map[2] = ft_strdup(is_global);
-    ft_lstadd_back(&env, ft_lstnew(map));
+    ft_lstadd_back(&(data->env), ft_lstnew(map));
 }
 
-void unset_env(char *key, t_list *env)
+void unset_env(char *key, t_data *data)
 {
-    t_list *tmp;
-    int len;
+    t_list  *tmp;
+    t_list  *prev;
+    t_list  *next;
+    int     len;
 
-    tmp = env;
+    tmp = data->env;
+    prev = tmp;
     len = ft_strlen(key);
-    if (tmp && ft_strncmp(key, ((char **)tmp->content)[0], len) == 0)
-    {
-        env = tmp->next;
-        ft_lstdelone(tmp, &free_env_content);
-        return;
-    }
-    while (tmp->next)
+    while (tmp)
     {
         if (ft_strncmp(key, ((char **)tmp->content)[0], len) == 0)
         {
-            tmp->next = tmp->next->next;
-            ft_lstdelone(tmp->next, &free_env_content);
+            next = tmp->next;
+            ft_lstdelone(tmp, &free_env_content);
+            prev->next = next;
             return;
         }
+        prev = tmp;
         tmp = tmp->next;
     }
 }
 
-void free_env_content(void *env)
+void free_env_content(void *content)
 {
-    free(((char **)((t_list *)env)->content)[0]);
-    free(((char **)((t_list *)env)->content)[1]);
-    free(((char **)((t_list *)env)->content)[2]);
-    free(((t_list *)env)->content);
+    free(((char **)content)[0]);
+    free(((char **)content)[1]);
+    free(((char **)content)[2]);
+    free((char **)content);
 }

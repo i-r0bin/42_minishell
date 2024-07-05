@@ -59,15 +59,15 @@ void ft_pwd()
 void ft_export(t_data *data)
 {
     if (!data->args[1])
-    print_export(data);
-    if (data->args[1][0] == '=')
+        print_export(data);
+    else if (data->args[1][0] == '=')
     {
         ft_putstr_fd("minishell: export: `", 2);
         ft_putstr_fd(data->args[1], 2);
         ft_putendl_fd("': not a valid identifier", 2);
     }
     else
-        set_env(data->args[1], data->env, "1");
+        set_env(((char **)data->args)[1], data, "1");
 }
 
 void ft_unset(t_data *data)
@@ -79,7 +79,7 @@ void ft_unset(t_data *data)
     while (data->args[i])
     {
         key = ft_strtrim(data->args[i], " ");
-        unset_env(key, data->env);
+        unset_env(key, data);
         i++;
     }
 }
@@ -91,11 +91,11 @@ void ft_env(t_data *data)
     tmp = data->env;
     while (tmp)
     {
-        if (((char *)tmp->content)[1] != '\0')
+        if (((char *)tmp->content)[1] != '\0' && *((char **)tmp->content)[2] == '0')
         {
-            ft_putstr_fd(&((char *)tmp->content)[0], 1);
+            ft_putstr_fd(((char **)tmp->content)[0], 1);
             ft_putchar_fd('=', 1);
-            ft_putendl_fd(&((char *)tmp->content)[1], 1);
+            ft_putendl_fd(((char **)tmp->content)[1], 1);
         }
         tmp = tmp->next;
     }

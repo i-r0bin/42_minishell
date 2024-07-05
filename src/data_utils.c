@@ -5,7 +5,7 @@ void init_data(t_data *data, char **env)
     data->env = NULL;
     while(env && *env)
     {
-        set_env(*env, data->env, "0");
+        set_env(*env, data, "0");
         env++;
     }
     if (!data->env)
@@ -61,7 +61,8 @@ void parse_line(t_data *data)
     //int i;
 
     data->cmd = ft_strtrim(data->line, " ");
-    data->args = split_cmd(data->cmd);
+    if (data->cmd && data->cmd[0])
+        data->args = split_cmd(data->cmd);
     if (data->args)
     {
         // ancora da capire cosa gestire prima e dopo (pipe, redir, comando)

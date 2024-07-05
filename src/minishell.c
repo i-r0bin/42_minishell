@@ -16,8 +16,9 @@ int main(int ac, char **av, char **env)
             break;
         if (data.line[0] != '\0')
         {
-            add_history(data.line);
             parse_line(&data);
+            if (data.cmd && data.cmd[0])
+                add_history(data.line);
         }
         free(data.line);
     }

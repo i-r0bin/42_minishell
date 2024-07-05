@@ -13,18 +13,7 @@ void print_export(t_data *data)
     {
         tmp = get_next_sorted_var(data->env, last);
         last = ((char **)tmp->content)[0];
-        if (*((char **)tmp->content)[1] != '\0')
-            write_exp_var(tmp);
-        c++;
-    }
-    tmp = NULL;
-    c = 0;
-    while (c < ft_lstsize(data->env))
-    {
-        tmp = get_next_sorted_var(data->env, last);
-        last = ((char **)tmp->content)[0];
-        if (*((char **)tmp->content)[1] == '\0')
-            write_exp_var(tmp);
+        write_exp_var(tmp);
         c++;
     }
 }
@@ -33,10 +22,11 @@ void write_exp_var(t_list *var)
 {
     ft_putstr_fd("declare -x ", 1);
     ft_putstr_fd(((char **)var->content)[0], 1);
-    if (*((char **)var->content)[1] != '\0')
+    if (((char **)var->content)[1])
     {
         ft_putstr_fd("=\"", 1);
-        ft_putstr_fd(((char **)var->content)[1], 1);
+        if (*((char **)var->content)[1] != '\0')
+            ft_putstr_fd(((char **)var->content)[1], 1);
         ft_putendl_fd("\"", 1);
     }
     else
@@ -64,15 +54,15 @@ t_list *get_next_sorted_var(t_list *env, char *last)
 }
 
 //serve davvero questa funzione?
-void set_env_exp(char *key, t_list *env)
+void set_env_exp(char *key, t_data *data)
 {
     t_list *tmp;
     int len;
  
-    tmp = env;
+    tmp = data->env;
     len = ft_strlen(key);
     while (tmp && ft_strncmp(key, ((char **)tmp->content)[0], len) != 0)
         tmp = tmp->next;
     if (!tmp)
-        add_env(key, NULL, env, "1");
+        add_env(key, NULL, data, "1");
 }
