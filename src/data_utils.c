@@ -28,32 +28,31 @@ void free_data(t_data *data)
     if (data->cmd)
         free(data->cmd);
     if (data->args)
-    {
-        while(*data->args)
-            free(*data->args++);
-        free(data->args);
-    }
+        free_array(data->args);
     if (data->env)
     {
         ft_lstiter(data->env, &free_env_node);
         free(data->env);
     }
     if (data->pipe)
-    {
-        while(*data->pipe)
-            free(*data->pipe++);
-        free(data->pipe);
-    }
+        free_array(data->pipe);
     if (data->fd)
         free(data->fd);
     if (data->fd_pipe)
         free(data->fd_pipe);
 }
 
-void free_env_node(void *env)
+void    free_array(char **array)
 {
-    free_env_content(env);
-    free(env);
+    char    **tmp;
+
+    tmp = array;
+    if (tmp)
+    {
+        while(*tmp)
+            free(*tmp++);
+        free(array);
+    }
 }
 
 void parse_line(t_data *data)

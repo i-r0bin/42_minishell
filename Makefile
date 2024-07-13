@@ -12,7 +12,9 @@ SRC = \
 	$Sdata_format.c \
 	$Scmds.c \
 	$Sexec.c \
+	$Senv.c \
 	$Senv_utils.c \
+	$Senv_format.c \
 	$Sexp_utils.c \
 	$Spipe_utils.c \
 	$Sredir_utils.c

@@ -12,6 +12,8 @@ void print_export(t_data *data)
     while (c < ft_lstsize(data->env))
     {
         tmp = get_next_sorted_var(data->env, last);
+        if (!tmp)
+            break;
         last = ((char **)tmp->content)[0];
         write_exp_var(tmp);
         c++;
