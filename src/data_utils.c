@@ -82,6 +82,7 @@ void parse_line(t_data *data)
             }
             i++;
         }*/
+        data_env_format(data);
         exec_cmd(data);
     }
 }
