@@ -17,13 +17,17 @@ int	args_num(char const *line)
             d_quote = d_quote ? 0 : 1;
         else if (line[i] == '\'' && !d_quote && ft_strchr(line + i + 1, '\''))
             s_quote = s_quote ? 0 : 1;
-        if((!d_quote && !s_quote && line[i] != ' ') && line[i + 1] == ' ')
+        if((!d_quote && !s_quote && line[i] != ' ') && (line[i + 1] == ' ' || line[i + 1] == '>' || line[i + 1] == '<' || (line[i + 1] == '|' && line[i + 2] != '|')))
 			n++;
-        else if((!d_quote && !s_quote && line[i] != ' ') && (line[i] == '>' || line[i] == '<'))
+        else if(!d_quote && !s_quote && (line[i] == '>' || line[i] == '<'))
         {
-            n++;
             while (line[i] == '>' || line[i] == '<')
                 i++;
+            n++;
+        }
+        else if (!d_quote && !s_quote && line[i] == '|' && line[i + 1] != '|')
+        {
+            i++;
             n++;
         }
 		i++;
@@ -37,15 +41,11 @@ int	arg_size(char const *s)
     int d_quote;
     int i;
     int	len;
-    int redir;
 
     s_quote = 0;
     d_quote = 0;
     i = 0;
 	len = 0;
-    redir = 0;
-    if (s[i] == '<' || s[i] == '>')
-        redir = 1;
     while (s[i] && (s[i] != ' ' || d_quote || s_quote))
     {
         if (s[i] == '\"' && !s_quote && ft_strchr(s + i + 1, '\"'))
@@ -53,14 +53,7 @@ int	arg_size(char const *s)
         else if (s[i] == '\'' && !d_quote && ft_strchr(s + i + 1, '\''))
             s_quote = s_quote ? 0 : 1;
         if ((!d_quote && !s_quote && s[i] != ' ') || d_quote || s_quote)
-        {
-            if ((s[i] == '<' || s[i] == '>') && redir == 0)
-                break;
-            else if (redir == 1 && (s[i] != '<' || s[i] != '>'))
-                break;
-            else
-                len++;
-        }
+            len++;
         i++;
     }
 	return (len);

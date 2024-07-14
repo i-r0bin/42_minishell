@@ -14,7 +14,7 @@ void    data_env_format(t_data *data)
         env = NULL;
         key_pos = ft_strchr(data->args[i], '$');
         if (key_pos)
-            env = get_env(key_pos, data->env);
+            env = get_env(key_pos, data);
         if (key_pos && *first == *key_pos && env)
             replace_env(data, i, key_pos);
         else if (*first == '\"' && ft_strchr(first + 1, '\"') && key_pos && env)
@@ -29,7 +29,7 @@ void    replace_env(t_data *data, int arg_index, char *key_pos)
 {
     char    *env;
 
-    env = get_env(key_pos, data->env);
+    env = get_env(key_pos, data);
     if (env)
     {
         free(data->args[arg_index]);
@@ -62,8 +62,8 @@ void    replace_double_quote(t_data *data, int arg_index, char *key_pos, char *e
     }
     free(data->args[arg_index]);
     data->args[arg_index] = new_arg;
-    if (ft_strchr(data->args[arg_index], '$') && get_env(ft_strchr(data->args[arg_index], '$'), data->env))
-        replace_double_quote(data, arg_index, ft_strchr(data->args[arg_index], '$'), get_env(ft_strchr(data->args[arg_index], '$'), data->env));
+    if (ft_strchr(data->args[arg_index], '$') && get_env(ft_strchr(data->args[arg_index], '$'), data))
+        replace_double_quote(data, arg_index, ft_strchr(data->args[arg_index], '$'), get_env(ft_strchr(data->args[arg_index], '$'), data));
 }
 
 void    replace_quote(t_data *data, int arg_index, char quote)

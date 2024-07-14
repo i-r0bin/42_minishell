@@ -77,7 +77,7 @@ void    replace_double_quote(t_data *data, int arg_index, char *key_pos, char *e
 void    replace_quote(t_data *data, int arg_index, char quote);
 int     key_len(char *key_pos);
 char    *formatted_arg_allocation(char *arg, int env_len, int key_len);
-char    *get_env(char *key, t_list *env);
+char    *get_env(char *key, t_data *data);
 void    set_env(char *arg, t_data *data, char *is_global);
 t_list  *update_env(char *key, char *value, t_data *data);
 void    add_env(char *key, char *value, t_data *data, char *is_global);

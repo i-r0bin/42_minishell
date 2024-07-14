@@ -2,11 +2,29 @@
 
 void exec_cmd(t_data *data)
 {
-    if (ft_strchr(data->cmd, '>') || ft_strchr(data->cmd, '<'))
+    char **args;
+    int i;
+    int redir;
+    int pipe;
+
+    args = data->args;
+    i = 0;
+    redir = 0;
+    pipe = 0;
+    while (args[i])
+    {
+        if (args[i][0] == '<' || args[i][0] == '>')
+            redir = 1;
+        if (args[i][0] == '|')
+            pipe = 1;
+        i++;
+    }
+    if (redir)
         exec_redirection(data);
-    else if (ft_strchr(data->cmd, '|'))
+    else if (pipe)
         exec_pipe(data);
-    exec_builtin(data);
+    else
+        exec_builtin(data);
 }
 
 void exec_pipe(t_data *data)

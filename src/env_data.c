@@ -1,12 +1,14 @@
 #include "minishell.h"
 
-char *get_env(char *key, t_list *env)
+char *get_env(char *key, t_data *data)
 {
     t_list *tmp;
 
-    tmp = env;
+    tmp = data->env;
     if (*key == '$')
         key++;
+    if (*key == '?')
+        return (ft_itoa(data->status));
     while (tmp)
     {
         if (ft_strncmp(key, ((char **)tmp->content)[0], ft_strlen(((char **)tmp->content)[0])) == 0)

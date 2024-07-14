@@ -44,7 +44,7 @@ void ft_cd(t_data *data)
         }
     }
     else
-        chdir(get_env("$HOME", data->env));
+        chdir(get_env("$HOME", data));
 }
 
 void ft_pwd()
