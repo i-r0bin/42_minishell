@@ -33,12 +33,12 @@ void exec_pipe(t_data *data)
     int fd[2];
 
     i = 0;
+    //data->pipe deve essere splittato dagli args
     data->pipe = ft_split(data->cmd, '|');
     while (data->pipe[i])
     {
         pipe(fd);
         data->pid = fork();
-        ft_putnbr_fd(data->pid, 1);
         if (data->pid == 0)
         {
             set_input_output(data, i, fd);
@@ -71,6 +71,7 @@ void exec_redirection(t_data *data)
             exec_here_documents(data, i);
         i++;
     }
+    // perché bin? non mi ricordo, probabilmente errore o forse ci vuole exec_cmd o al massimo exec_builtin
     exec_bin(data);
 }
 

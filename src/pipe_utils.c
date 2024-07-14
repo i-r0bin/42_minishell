@@ -28,6 +28,7 @@ void set_fd_pipe(t_data *data, int fd[2], int i)
 
 void exec_pipe_cmd(t_data *data, char *cmd)
 {
+    //anche qui come in rediractions splittare cmd dagli args
     data->args = split_cmd(cmd);
     if (ft_strchr(cmd, '>') || ft_strchr(cmd, '<'))
         exec_redirection(data);
