@@ -20,6 +20,7 @@ void exec_pipe(t_data *data)
     {
         pipe(fd);
         data->pid = fork();
+        ft_putnbr_fd(data->pid, 1);
         if (data->pid == 0)
         {
             set_input_output(data, i, fd);
@@ -57,15 +58,16 @@ void exec_redirection(t_data *data)
 
 void exec_bin(t_data *data)
 {
+    char **env;
     data->pid = fork();
     if (data->pid == 0)
     {
-        // al terzo parametro va array di stringhe estratto da lista data->env
-        if (execve(data->args[0], data->args, data->args) == -1)
+        env = env_to_array(data->env);
+        if (execve(data->args[0], data->args, env) == -1)
         {
             ft_putstr_fd("minishell: ", 2);
             ft_putstr_fd(data->args[0], 2);
-            ft_putstr_fd(": command not found\n", 2);
+            ft_putstr_fd(": No such file or directory\n", 2);
             exit(127);
         }
     }

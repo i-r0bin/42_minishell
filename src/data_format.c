@@ -13,9 +13,9 @@ int	args_num(char const *line)
     d_quote = 0;
 	while (line[i] != '\0')
 	{
-        if (line[i] == '\"' && !s_quote)
+        if (line[i] == '\"' && !s_quote && ft_strchr(line + i + 1, '\"'))
             d_quote = d_quote ? 0 : 1;
-        else if (line[i] == '\'' && !d_quote)
+        else if (line[i] == '\'' && !d_quote && ft_strchr(line + i + 1, '\''))
             s_quote = s_quote ? 0 : 1;
         if((!d_quote && !s_quote && line[i] != ' ') && line[i + 1] == ' ')
 			n++;
@@ -48,9 +48,9 @@ int	arg_size(char const *s)
         redir = 1;
     while (s[i] && (s[i] != ' ' || d_quote || s_quote))
     {
-        if (s[i] == '\"' && !s_quote)
+        if (s[i] == '\"' && !s_quote && ft_strchr(s + i + 1, '\"'))
             d_quote = d_quote ? 0 : 1;
-        else if (s[i] == '\'' && !d_quote)
+        else if (s[i] == '\'' && !d_quote && ft_strchr(s + i + 1, '\''))
             s_quote = s_quote ? 0 : 1;
         if ((!d_quote && !s_quote && s[i] != ' ') || d_quote || s_quote)
         {
@@ -77,18 +77,14 @@ char	**split_cmd(char const *line)
     if (!line)
         return (0);
     n = args_num(line);
-    args = (char **)malloc((n + 1) * sizeof(char *));
-    if (!args)
-        return (0);
+    args = ft_calloc(n + 1, sizeof(char *));
     tmp = (char *)line;
     j = 0;
     while (j < n)
     {
         tmp = ft_strtrim(tmp, " ");
         size = arg_size(tmp);
-        args[j] = (char *)malloc((size + 1) * sizeof(char));
-        if (!args[j])
-            return (0);
+        args[j] = ft_calloc(size + 1, sizeof(char));
         ft_strlcpy(args[j], tmp, size + 1);
         tmp = tmp + size;
         j++;

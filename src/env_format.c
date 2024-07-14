@@ -3,24 +3,24 @@
 void    data_env_format(t_data *data)
 {
     int     i;
-    char    first;
+    char    *first;
     char    *key_pos;
     char    *env;
 
     i = 0;
     while (data->args[i])
     {
-        first = data->args[i][0];
+        first = data->args[i];
         env = NULL;
         key_pos = ft_strchr(data->args[i], '$');
         if (key_pos)
             env = get_env(key_pos, data->env);
-        if (key_pos && first == *key_pos && env)
+        if (key_pos && *first == *key_pos && env)
             replace_env(data, i, key_pos);
-        else if (first == '\"' && key_pos && env)
+        else if (*first == '\"' && ft_strchr(first + 1, '\"') && key_pos && env)
             replace_double_quote(data, i, key_pos, env);
-        else if (first == '\"' || first == '\'')
-            replace_quote(data, i, first);
+        else if ((*first == '\"' && ft_strchr(first + 1, '\"')) || (*first == '\'' && ft_strchr(first + 1, '\'')))
+            replace_quote(data, i, *first);
         i++;
     }
 }
@@ -60,14 +60,10 @@ void    replace_double_quote(t_data *data, int arg_index, char *key_pos, char *e
         else
             j++;
     }
-    new_arg[k] = '\0';
     free(data->args[arg_index]);
     data->args[arg_index] = new_arg;
     if (ft_strchr(data->args[arg_index], '$') && get_env(ft_strchr(data->args[arg_index], '$'), data->env))
-    {
-        env = get_env(ft_strchr(data->args[arg_index], '$'), data->env);
-        replace_double_quote(data, arg_index, ft_strchr(data->args[arg_index], '$'), env);
-    }
+        replace_double_quote(data, arg_index, ft_strchr(data->args[arg_index], '$'), get_env(ft_strchr(data->args[arg_index], '$'), data->env));
 }
 
 void    replace_quote(t_data *data, int arg_index, char quote)
@@ -76,10 +72,7 @@ void    replace_quote(t_data *data, int arg_index, char quote)
     int     j;
     int     k;
 
-    if (data->args[arg_index][ft_strlen(data->args[arg_index])] == quote)
-        new_arg = (char *)malloc(ft_strlen(data->args[arg_index]) - 2 + 1);
-    else
-        new_arg = (char *)malloc(ft_strlen(data->args[arg_index]) - 1 + 1);
+    new_arg = ft_calloc(ft_strlen(data->args[arg_index]) - 2 + 1, sizeof(char));
     j = 0;
     k = 0;
     while (data->args[arg_index][j])
@@ -91,7 +84,6 @@ void    replace_quote(t_data *data, int arg_index, char quote)
         }
         j++;
     }
-    new_arg[k] = '\0';
     free(data->args[arg_index]);
     data->args[arg_index] = new_arg;
 }
@@ -106,6 +98,6 @@ char    *formatted_arg_allocation(char *arg, int env_len, int key_len)
         len--;
     if (arg[ft_strlen(arg)] == '\"')
         len--;
-    new_arg = (char *)malloc(len + 1 * sizeof(char));
+    new_arg = ft_calloc(len + 1, sizeof(char));
     return (new_arg);
 }

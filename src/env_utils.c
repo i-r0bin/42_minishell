@@ -23,3 +23,23 @@ void free_env_content(void *content)
     free(((char **)content)[2]);
     free(((char **)content)[3]);
 }
+
+char    **env_to_array(t_list *env)
+{
+    char    **array;
+    int     i;
+    t_list  *tmp;
+
+    i = 0;
+    tmp = env;
+    array = (char **)malloc(sizeof(char *) * (ft_lstsize(env) + 1));
+    while (tmp)
+    {
+        array[i] = ft_strjoin(((char **)tmp->content)[0], "=");
+        array[i] = ft_strjoin(array[i], ((char **)tmp->content)[1]);
+        i++;
+        tmp = tmp->next;
+    }
+    array[i] = NULL;
+    return (array);
+}

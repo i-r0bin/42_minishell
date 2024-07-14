@@ -82,6 +82,7 @@ void    set_env(char *arg, t_data *data, char *is_global);
 t_list  *update_env(char *key, char *value, t_data *data);
 void    add_env(char *key, char *value, t_data *data, char *is_global);
 void    unset_env(char *key, t_data *data);
+char    **env_to_array(t_list *env);
 void    print_export(t_data *data);
 void    write_exp_var(t_list *var);
 t_list  *get_next_sorted_var(t_list *env, char *last);

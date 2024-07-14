@@ -9,7 +9,7 @@ int main(int ac, char **av, char **env)
     init_data(&data, env);
     signal(SIGINT, signal_handler);
     signal(SIGQUIT, SIG_IGN);
-    while (1)
+    while (data.exit == 0)
     {
         data.line = readline("minishell$ ");
         if (!data.line)
@@ -23,6 +23,7 @@ int main(int ac, char **av, char **env)
         free(data.line);
     }
     free_data(&data);
+    ft_putstr_fd("exit\n", 1);
     return (0);
 }
 
