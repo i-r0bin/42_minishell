@@ -65,9 +65,15 @@ void ft_exit(t_data *data)
     if (data->args[1])
     {
         if (data->args[2])
+        {
             ft_error(data, NULL, "too many arguments");
+            data->status = 1;
+        }
         else if (!ft_isnumber(data->args[1]))
+        {
             ft_error(data, data->args[1], "numeric argument required");
+            data->status = 2;
+        }
         else
         {
             data->status = ft_atoi(data->args[1]);

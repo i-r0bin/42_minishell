@@ -104,17 +104,3 @@ int export_error(t_data *data, char *arg)
     }
     return (error);
 }
-
-//serve davvero questa funzione?
-void set_env_exp(char *key, t_data *data)
-{
-    t_list *tmp;
-    int len;
- 
-    tmp = data->env;
-    len = ft_strlen(key);
-    while (tmp && ft_strncmp(key, ((char **)tmp->content)[0], len) != 0)
-        tmp = tmp->next;
-    if (!tmp)
-        add_env(key, NULL, data, "1");
-}

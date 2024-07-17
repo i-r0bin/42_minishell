@@ -1,9 +1,10 @@
 #include "minishell.h"
 
 void    init_data(t_data *data, char **env);
-void    free_data(t_data *data);
 void    parse_line(t_data *data);
+void    exec_cmd(t_data *data);
 void    wait_and_save_exit_status(t_data *data);
+void    free_data(t_data *data);
 
 void    init_data(t_data *data, char **env)
 {
@@ -28,6 +29,51 @@ void    init_data(t_data *data, char **env)
     data->exit = 0;
 }
 
+void    parse_line(t_data *data)
+{
+    data->cmd = ft_strtrim(data->line, " ");
+    if (data->cmd && data->cmd[0])
+        data->args = split_args(data->cmd);
+    if (data->args)
+        exec_cmd(data);
+}
+
+void exec_cmd(t_data *data)
+{
+    char **args;
+    int i;
+    int redir;
+    int pipe;
+
+    args = data->args;
+    i = 0;
+    redir = 0;
+    pipe = 0;
+    while (args[i])
+    {
+        if (args[i][0] == '<' || args[i][0] == '>')
+            redir = 1;
+        if (args[i][0] == '|')
+            pipe = 1;
+        i++;
+    }
+    data_env_format(data);
+    remove_null_args(data);
+    if (redir)
+        exec_redirection(data);
+    else if (pipe)
+        exec_pipe(data);
+    else
+        exec_builtin(data);
+}
+
+void    wait_and_save_exit_status(t_data *data)
+{
+    waitpid(data->pid, &data->status, 0);
+    if (WIFEXITED(data->status))
+        data->status = WEXITSTATUS(data->status);
+}
+
 void    free_data(t_data *data)
 {
     if (data->cmd)
@@ -45,42 +91,4 @@ void    free_data(t_data *data)
         free(data->fd);
     if (data->fd_pipe)
         free(data->fd_pipe);
-}
-
-void    parse_line(t_data *data)
-{
-    //int i;
-
-    data->cmd = ft_strtrim(data->line, " ");
-    if (data->cmd && data->cmd[0])
-        data->args = split_args(data->cmd);
-    if (data->args)
-    {
-        // ancora da capire cosa gestire prima e dopo (pipe, redir, comando)
-        /*i = 0;
-        while(data->args[i])
-        {
-            if (ft_strncmp(data->args[i], "<<", 2) == 0 || ft_strncmp(data->args[i], ">>", 2) == 0 
-                || ft_strncmp(data->args[i], ">", 1) == 0 || ft_strncmp(data->args[i], "<", 1) == 0)
-            {
-                if(data->args[i + 1] == NULL)
-                {
-                    ft_putendl_fd("minishell: syntax error near unexpected token `newline'", 2);
-                    return ;
-                }
-                else
-                    exec_redirection(data);
-            }
-            i++;
-        }*/
-        //data_env_format(data);
-        exec_cmd(data);
-    }
-}
-
-void    wait_and_save_exit_status(t_data *data)
-{
-    waitpid(data->pid, &data->status, 0);
-    if (WIFEXITED(data->status))
-        data->status = WEXITSTATUS(data->status);
 }

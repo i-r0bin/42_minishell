@@ -24,6 +24,7 @@ int main(int ac, char **av, char **env)
     }
     free_data(&data);
     ft_putstr_fd("exit\n", 1);
+    exit(data.status);
     return (0);
 }
 

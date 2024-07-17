@@ -6,8 +6,6 @@ int     ft_isnumber(char *str);
 void    ft_error(t_data *data, char *arg, char *error)
 {
     ft_putstr_fd("minishell: ", 2);
-    ft_putstr_fd(data->args[0], 2);
-    ft_putstr_fd(": ", 2);
     if (arg)
     {
         if (ft_strncmp(data->args[0], "export", 6) == 0)
@@ -18,9 +16,8 @@ void    ft_error(t_data *data, char *arg, char *error)
         ft_putstr_fd(": ", 2);
     }
     ft_putendl_fd(error, 2);
-    if (WIFEXITED(data->status))
-        data->status = WEXITSTATUS(data->status);
-    exit(data->status);
+    if (data->status == 0)
+        data->status = 1;
 }
 
 int ft_isnumber(char *str)
