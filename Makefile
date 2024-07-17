@@ -10,14 +10,17 @@ SRC = \
 	$Sminishell.c \
 	$Sdata_utils.c \
 	$Sdata_format.c \
-	$Scmds.c \
-	$Sexec.c \
 	$Senv_data.c \
 	$Senv_utils.c \
 	$Senv_format.c \
-	$Sexp_utils.c \
+	$Scmds.c \
+	$Sft_echo.c \
+	$Sft_export.c \
+	$Sexec.c \
 	$Spipe_utils.c \
-	$Sredir_utils.c
+	$Sredir_utils.c \
+	$Sft_error.c \
+	$Sutils.c
 
 OBJ = $(SRC:$S%.c=$O%.o)
 

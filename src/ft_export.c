@@ -1,5 +1,27 @@
 #include "minishell.h"
 
+void    ft_export(t_data *data);
+void    print_export(t_data *data);
+void    write_exp_var(t_list *var);
+t_list  *get_next_sorted_var(t_list *env, char *last);
+int     export_error(t_data *data, char *arg);
+void    set_env_exp(char *key, t_data *data); //non serve
+
+void ft_export(t_data *data)
+{
+    int i;
+
+    i = 1;
+    if (!data->args[1])
+        print_export(data);
+    while(data->args[i])
+    {
+        if (!export_error(data, data->args[i]))
+            set_env(((char **)data->args)[i], data, "1");
+        i++;
+    }
+}
+
 void print_export(t_data *data)
 {
     t_list *tmp;
@@ -53,6 +75,34 @@ t_list *get_next_sorted_var(t_list *env, char *last)
         tmp = tmp->next;
     }
     return (min);
+}
+
+int export_error(t_data *data, char *arg)
+{
+    int     i;
+    int     error;
+
+    error = 0;
+    if(arg[0] == '=' || ft_isdigit(arg[0]))
+    {
+        ft_error(data, arg, "not a valid identifier");
+        error = 1;
+    }
+    else if (ft_strchr(arg, '-'))
+    {
+        i = 0;
+        while (arg[i] != '=' && arg[i] != '\0')
+        {
+            if (arg[i] == '-')
+            {
+                ft_error(data, arg, "not a valid identifier");
+                error = 1;
+                break ;
+            }
+            i++;
+        }
+    }
+    return (error);
 }
 
 //serve davvero questa funzione?

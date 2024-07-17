@@ -1,72 +1,83 @@
 #include "minishell.h"
 
+void    data_env_format(t_data *data);
+char    *get_quote(char *arg);
+void    replace_env(t_data *data, int arg_index, char *key_pos, char *env);
+void    remove_quotes(t_data *data, int arg_index, char quote);
+char    *formatted_arg_allocation(char *arg, int env_len, int key_len);
+
 void    data_env_format(t_data *data)
 {
     int     i;
-    char    *first;
+    char    *quote;
     char    *key_pos;
     char    *env;
 
     i = 0;
     while (data->args[i])
     {
-        first = data->args[i];
         env = NULL;
-        key_pos = ft_strchr(data->args[i], '$');
+        quote = get_quote(data->args[i]);
+        key_pos = get_key_pos(data->args[i]);
         if (key_pos)
             env = get_env(key_pos, data);
-        if (key_pos && *first == *key_pos && env)
-            replace_env(data, i, key_pos);
-        else if (*first == '\"' && ft_strchr(first + 1, '\"') && key_pos && env)
-            replace_double_quote(data, i, key_pos, env);
-        else if ((*first == '\"' && ft_strchr(first + 1, '\"')) || (*first == '\'' && ft_strchr(first + 1, '\'')))
-            replace_quote(data, i, *first);
+        if (!quote || *quote != '\'')
+            replace_env(data, i, key_pos, env);
+        quote = get_quote(data->args[i]);
+        if (quote && *quote && ft_strchr(quote + 1, *quote))
+            remove_quotes(data, i, *quote);
         i++;
     }
 }
 
-void    replace_env(t_data *data, int arg_index, char *key_pos)
+char    *get_quote(char *arg)
 {
-    char    *env;
+    int     i;
 
-    env = get_env(key_pos, data);
-    if (env)
+    i = 0;
+    while (arg[i])
     {
-        free(data->args[arg_index]);
-        data->args[arg_index] = ft_strdup(env);
+        if (arg[i] == '\"' && ft_strchr(arg + i + 1, '\"'))
+            return (arg + i);
+        else if (arg[i] == '\'' && ft_strchr(arg + i + 1, '\''))
+            return (arg + i);
+        i++;
     }
+    return (NULL);
 }
 
-void    replace_double_quote(t_data *data, int arg_index, char *key_pos, char *env)
+void    replace_env(t_data *data, int arg_index, char *key_pos, char *env)
 {
     char    *new_arg;
     int     j;
     int     k;
+    int     env_len;
+    int     key_len;
 
-    new_arg = formatted_arg_allocation(data->args[arg_index], ft_strlen(env), key_len(key_pos));
+    env_len = env ? ft_strlen(env) : 0;
+    key_len = key_pos && *(key_pos + 1) != ' ' ? get_key_len(key_pos) : 0;
+    new_arg = formatted_arg_allocation(data->args[arg_index], env_len, key_len);
     k = 0;
     j = 0;
     while (data->args[arg_index][j])
     {
         if (data->args[arg_index][j] == '$' && key_pos)
         {
-            while (*env)
+            while (env && *env)
                 new_arg[k++] = *(env++);
-            j += key_len(key_pos);
+            j += key_len;
             key_pos = NULL;
         }
-        else if (data->args[arg_index][j] != '\"')
-            new_arg[k++] = data->args[arg_index][j++];
         else
-            j++;
+            new_arg[k++] = data->args[arg_index][j++];
     }
     free(data->args[arg_index]);
     data->args[arg_index] = new_arg;
     if (ft_strchr(data->args[arg_index], '$') && get_env(ft_strchr(data->args[arg_index], '$'), data))
-        replace_double_quote(data, arg_index, ft_strchr(data->args[arg_index], '$'), get_env(ft_strchr(data->args[arg_index], '$'), data));
+        replace_env(data, arg_index, ft_strchr(data->args[arg_index], '$'), get_env(ft_strchr(data->args[arg_index], '$'), data));
 }
 
-void    replace_quote(t_data *data, int arg_index, char quote)
+void    remove_quotes(t_data *data, int arg_index, char quote)
 {
     char    *new_arg;
     int     j;
@@ -94,10 +105,6 @@ char    *formatted_arg_allocation(char *arg, int env_len, int key_len)
     char    *new_arg;
 
     len = ft_strlen(arg) + env_len - key_len;
-    if (arg[0] == '\"')
-        len--;
-    if (arg[ft_strlen(arg)] == '\"')
-        len--;
     new_arg = ft_calloc(len + 1, sizeof(char));
     return (new_arg);
 }

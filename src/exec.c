@@ -1,5 +1,11 @@
 #include "minishell.h"
 
+void    exec_cmd(t_data *data);
+void    exec_pipe(t_data *data);
+void    exec_redirection(t_data *data);
+void    exec_bin(t_data *data);
+void    exec_builtin(t_data *data);
+
 void exec_cmd(t_data *data)
 {
     char **args;
@@ -19,6 +25,8 @@ void exec_cmd(t_data *data)
             pipe = 1;
         i++;
     }
+    data_env_format(data);
+    remove_null_args(data);
     if (redir)
         exec_redirection(data);
     else if (pipe)
@@ -77,26 +85,49 @@ void exec_redirection(t_data *data)
 
 void exec_bin(t_data *data)
 {
+    char *path;
+    char *cmd;
     char **env;
-    data->pid = fork();
-    if (data->pid == 0)
+
+    cmd = data->args[0];
+    path = get_env("PATH", data);
+    env = env_to_array(data->env);
+    if (path)
     {
-        env = env_to_array(data->env);
-        if (execve(data->args[0], data->args, env) == -1)
+        data->pid = fork();
+        if (data->pid == 0)
         {
-            ft_putstr_fd("minishell: ", 2);
-            ft_putstr_fd(data->args[0], 2);
-            ft_putstr_fd(": No such file or directory\n", 2);
+            execve(cmd, data->args, env);
+            ft_error(data, cmd, "command not found");
             exit(127);
         }
+        else
+            wait_and_save_exit_status(data);
     }
     else
-        wait_and_save_exit_status(data);
+    {
+        ft_error(data, cmd, "command not found");
+        data->status = 127;
+    }
+    free_array(env);
 }
 
-void wait_and_save_exit_status(t_data *data)
+void    exec_builtin(t_data *data)
 {
-    waitpid(data->pid, &data->status, 0);
-    if (WIFEXITED(data->status))
-        data->status = WEXITSTATUS(data->status);
+    if (ft_strncmp(data->args[0], "exit", 4) == 0)
+        ft_exit(data);
+    else if (ft_strncmp(data->args[0], "cd", 2) == 0)
+        ft_cd(data);
+    else if (ft_strncmp(data->args[0], "pwd", 3) == 0)
+        ft_pwd(data);
+    else if (ft_strncmp(data->args[0], "echo", 4) == 0)
+        ft_echo(data);
+    else if (ft_strncmp(data->args[0], "export", 6) == 0)
+        ft_export(data);
+    else if (ft_strncmp(data->args[0], "unset", 5) == 0)
+        ft_unset(data);
+    else if (ft_strncmp(data->args[0], "env", 3) == 0)
+        ft_env(data);
+    else
+        exec_bin(data);
 }

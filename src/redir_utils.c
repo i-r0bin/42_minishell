@@ -1,6 +1,12 @@
 #include "minishell.h"
 
-void input_redirection(t_data *data, int index)
+void    input_redirection(t_data *data, int index);
+void    output_redirection(t_data *data, int index);
+void    append_redirection(t_data *data, int index);
+void    exec_here_documents(t_data *data, int index);
+void    remove_redir_args(t_data *data, int index);
+
+void    input_redirection(t_data *data, int index)
 {
     int fd;
 
@@ -11,7 +17,7 @@ void input_redirection(t_data *data, int index)
     data->args[index + 1] = NULL;
 }
 
-void output_redirection(t_data *data, int index)
+void    output_redirection(t_data *data, int index)
 {
     int fd;
 
@@ -22,7 +28,7 @@ void output_redirection(t_data *data, int index)
     data->args[index + 1] = NULL;
 }
 
-void append_redirection(t_data *data, int index)
+void    append_redirection(t_data *data, int index)
 {
     int fd;
 
@@ -33,7 +39,7 @@ void append_redirection(t_data *data, int index)
     data->args[index + 1] = NULL;
 }
 
-void exec_here_documents(t_data *data, int index)
+void    exec_here_documents(t_data *data, int index)
 {
     int fd[2];
     char *line;
@@ -62,7 +68,7 @@ void exec_here_documents(t_data *data, int index)
     remove_redir_args(data, index);
 }
 
-void remove_redir_args(t_data *data, int index)
+void    remove_redir_args(t_data *data, int index)
 {
     while (data->args[index + 2])
     {
