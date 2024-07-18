@@ -53,7 +53,8 @@ void exec_cmd(t_data *data)
     pipe = 0;
     while (data->args[i])
     {
-        if (data->args[i][0] == '<' || data->args[i][0] == '>')
+        if ((data->args[i][0] == '<' || data->args[i][0] == '>') && 
+            (!data->args[i][1] || data->args[i][1] == '<' || data->args[i][1] == '>'))
             redir = 1;
         if (data->args[i][0] == '|')
             pipe = 1;
