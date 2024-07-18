@@ -28,6 +28,7 @@ void    data_env_format(t_data *data)
             remove_quotes(data, i, *quote);
         i++;
     }
+    remove_null_args(data);
 }
 
 char    *get_quote(char *arg)

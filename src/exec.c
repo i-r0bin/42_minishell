@@ -2,7 +2,7 @@
 
 void    exec_builtin(t_data *data);
 void    exec_bin(t_data *data);
-void    exec_bin_path(t_data *data, char *path);
+void    exec_bin_path(t_data *data, char **paths);
 void    exec_pipe(t_data *data);
 void    exec_redirection(t_data *data);
 
@@ -29,39 +29,47 @@ void    exec_builtin(t_data *data)
 void exec_bin(t_data *data)
 {
     char **paths;
-    int i;
 
     if (!get_env("PATH", data))
     {
         ft_error(data, data->args[0], "command not found");
         return ;
     }
+    if (check_dir(data))
+        return ;
     paths = ft_split(get_env("PATH", data), ':');
     if (execve(data->args[0], data->args, env_to_array(data->env)) == -1)
-    {
-        i = 0;
-        while (paths[i] && (data->status || i == 0))
-        {
-            exec_bin_path(data, paths[i]);
-            i++;
-        }
-    }
+        exec_bin_path(data, paths);
     if (data->status != 0)
+    {
         ft_error(data, data->args[0], "command not found");
+        data->status = 127;
+    }
     free_array(paths);
 }
 
-void    exec_bin_path(t_data *data, char *path)
+void    exec_bin_path(t_data *data, char **paths)
 {
     char    *cmd;
     int     pid;
+    int     i;
 
-    cmd = ft_strjoin(ft_strjoin(path, "/"), data->args[0]);
-    pid = fork();
-    if (pid == 0)
-        execve(cmd, data->args, env_to_array(data->env));
-    else
-        wait_and_save_exit_status(data);
+    i = 0;
+    while (paths[i] && (i == 0 || data->status != 0))
+    {
+        cmd = ft_strjoin(ft_strjoin(paths[i], "/"), data->args[0]);
+        pid = fork();
+        if (pid == 0)
+        {
+            execve(cmd, data->args, env_to_array(data->env));
+            exit(EXIT_FAILURE);
+        }
+        else
+        {
+            wait_and_save_exit_status(data);
+            i++;
+        }
+    }
 }
 
 void exec_pipe(t_data *data)
@@ -94,7 +102,9 @@ void exec_pipe(t_data *data)
 void exec_redirection(t_data *data)
 {
     int i;
+    int prev_fd;
 
+    prev_fd = dup(1);
     i = 0;
     while (data->args[i])
     {
@@ -108,6 +118,8 @@ void exec_redirection(t_data *data)
             exec_here_documents(data, i);
         i++;
     }
-    // perché bin? non mi ricordo, probabilmente errore o forse ci vuole exec_cmd o al massimo exec_builtin
-    exec_bin(data);
+    remove_null_args(data);
+    exec_cmd(data);
+    dup2(prev_fd, 1);
+    close(prev_fd);
 }

@@ -61,15 +61,22 @@ void    free_env_content(void *env);
 int     ft_isnumber(char *str);
 int     get_arr_len(char **arr);
 //args utils
+void    format_len(char *line, int *i, size_t *len);
+void    format_proc(char *line, char *new_line, int *i, int *len);
 char	**split_args(char const *line);
 int     get_args_num(char const *line);
 int     get_arg_size(char const *s);
 int     get_null_args_num(t_data *data);
 void    remove_null_args(t_data *data);
+int     check_quote(const char *line, int index, char quote);
+size_t  get_line_len(char *line);
+char    *token_format(char *line);
 //exit utils
 void    signal_handler(int signum);
 void    wait_and_save_exit_status(t_data *data);
 void    ft_error(t_data *data, char *arg, char *error);
+int     check_token_error(t_data *data);
+int     check_dir(t_data *data);
 //builtins
 void    ft_pwd();
 void    ft_cd(t_data *data);
@@ -85,7 +92,7 @@ void    exec_builtin(t_data *data);
 void    exec_redirection(t_data *data);
 void    exec_pipe(t_data *data);
 void    exec_bin(t_data *data);
-void    exec_bin_path(t_data *data, char *path);
+void    exec_bin_path(t_data *data, char **paths);
 //envp utils
 void    data_env_format(t_data *data);
 void    replace_env(t_data *data, int arg_index, char *key_pos, char *env);

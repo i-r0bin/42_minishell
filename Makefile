@@ -10,6 +10,7 @@ SRC = \
 	$Sminishell.c \
 	$Sdata_utils.c \
 	$Sdata_format.c \
+	$Stoken_format.c \
 	$Senv_data.c \
 	$Senv_utils.c \
 	$Senv_format.c \

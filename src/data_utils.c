@@ -32,33 +32,33 @@ void    init_data(t_data *data, char **env)
 void    parse_line(t_data *data)
 {
     data->cmd = ft_strtrim(data->line, " ");
+    data->cmd = token_format(data->cmd);
     if (data->cmd && data->cmd[0])
         data->args = split_args(data->cmd);
-    if (data->args)
+    if (check_token_error(data))
+        return ;
+    data_env_format(data);
+    if (data->args && data->args[0])
         exec_cmd(data);
 }
 
 void exec_cmd(t_data *data)
 {
-    char **args;
     int i;
     int redir;
     int pipe;
 
-    args = data->args;
     i = 0;
     redir = 0;
     pipe = 0;
-    while (args[i])
+    while (data->args[i])
     {
-        if (args[i][0] == '<' || args[i][0] == '>')
+        if (data->args[i][0] == '<' || data->args[i][0] == '>')
             redir = 1;
-        if (args[i][0] == '|')
+        if (data->args[i][0] == '|')
             pipe = 1;
         i++;
     }
-    data_env_format(data);
-    remove_null_args(data);
     if (redir)
         exec_redirection(data);
     else if (pipe)
@@ -69,7 +69,7 @@ void exec_cmd(t_data *data)
 
 void    wait_and_save_exit_status(t_data *data)
 {
-    waitpid(data->pid, &data->status, 0);
+    waitpid(data->pid, &(data->status), 0);
     if (WIFEXITED(data->status))
         data->status = WEXITSTATUS(data->status);
 }
