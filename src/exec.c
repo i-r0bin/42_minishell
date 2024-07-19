@@ -2,7 +2,7 @@
 
 void    exec_builtin(t_data *data);
 void    exec_bin(t_data *data);
-void    exec_bin_path(t_data *data, char **paths);
+int    exec_bin_path(t_data *data, char **paths);
 void    exec_pipe(t_data *data);
 void    exec_redirection(t_data *data);
 
@@ -28,7 +28,8 @@ void    exec_builtin(t_data *data)
 
 void exec_bin(t_data *data)
 {
-    char **paths;
+    char    **paths;
+    int     err;
 
     if (!get_env("PATH", data))
     {
@@ -37,10 +38,11 @@ void exec_bin(t_data *data)
     }
     if (check_bin(data))
         return ;
+    err = 0;
     paths = ft_split(get_env("PATH", data), ':');
     if (execve(data->args[0], data->args, env_to_array(data->env)) == -1)
-        exec_bin_path(data, paths);
-    if (data->status != 0)
+        err = exec_bin_path(data, paths);
+    if (!err)
     {
         ft_error(data, data->args[0], "command not found");
         data->status = 127;
@@ -48,14 +50,15 @@ void exec_bin(t_data *data)
     free_array(paths);
 }
 
-void    exec_bin_path(t_data *data, char **paths)
+int    exec_bin_path(t_data *data, char **paths)
 {
     char    *cmd;
     int     pid;
     int     i;
+    struct  stat path_stat;
 
     i = 0;
-    while (paths[i] && (i == 0 || data->status != 0))
+    while (paths[i])
     {
         cmd = ft_strjoin(ft_strjoin(paths[i], "/"), data->args[0]);
         pid = fork();
@@ -67,9 +70,12 @@ void    exec_bin_path(t_data *data, char **paths)
         else
         {
             wait_and_save_exit_status(data);
+            if (stat(cmd, &path_stat) == 0)
+                return (1);
             i++;
         }
     }
+    return (0);
 }
 
 void exec_pipe(t_data *data)

@@ -76,6 +76,7 @@ void    exec_here_documents(t_data *data, int index)
     }
     prev_fd = dup(1);
     pipe(fd);
+    dup2(fd[0], fd[1]);
     while (1)
     {
         line = readline("> ");
@@ -91,6 +92,10 @@ void    exec_here_documents(t_data *data, int index)
     close(fd[1]);
     dup2(fd[0], 0);
     close(fd[0]);
+    free(data->args[index]);
+    data->args[index] = ft_calloc(1, 1);
+    free(data->args[index + 1]);
+    data->args[index + 1] = ft_calloc(1, 1);
     remove_null_args(data);
     exec_cmd(data);
     dup2(prev_fd, 1);

@@ -104,7 +104,6 @@ int     check_token_error(t_data *data)
             {
                 token = ft_calloc(3, sizeof(char));
                 ft_strlcpy(token, data->args[i], 3);
-                token = ft_strjoin(token, "\'");
             }
             else if (data->args[i][1] && data->args[i][0] != data->args[i][1])
             {
@@ -115,7 +114,7 @@ int     check_token_error(t_data *data)
         if (token)
         {
             error = ft_strjoin("syntax error near unexpected token `", token);
-            error = ft_strjoin(error, "'");
+            error = ft_strjoin(error, "\'");
             ft_error(data, NULL, error);
             free(token);
             free(error);
