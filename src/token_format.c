@@ -18,9 +18,9 @@ char    *token_format(char *line)
     while (line[i] != '\0')
     {
         if (line[i] == '\"' && !s_quote)
-            d_quote = check_quote((char const *)line, i, '\"');
+            d_quote = check_quote((char const *)line, i, d_quote, '\"');
         else if (line[i] == '\'' && !d_quote)
-            s_quote = check_quote((char const *)line, i, '\'');
+            s_quote = check_quote((char const *)line, i, s_quote, '\'');
         if(!d_quote && !s_quote && (line[i] == '<' || line[i] == '>' || line[i] == '|'))
             format_proc(line, new_line, &i, &len);
         else if (line[i])
@@ -61,9 +61,9 @@ size_t	get_line_len(char *line)
     while (line[i] != '\0')
     {
         if (line[i] == '\"' && !s_quote)
-            d_quote = check_quote(line, i, '\"');
+            d_quote = check_quote(line, i, d_quote, '\"');
         else if (line[i] == '\'' && !d_quote)
-            s_quote = check_quote(line, i, '\'');
+            s_quote = check_quote(line, i, s_quote, '\'');
         if(!d_quote && !s_quote && (line[i] == '<' || line[i] == '>' || line[i] == '|'))
             format_len(line, &i, &len);
         i++;
@@ -96,10 +96,11 @@ void format_len(char *line, int *i, size_t *len)
         (*len)++;
 }
 
-int check_quote(const char *line, int index, char quote)
+int check_quote(const char *line, int index, int open, char quote)
 {
 
-    if (line[index + 1] && line[index] == quote && ft_strchr(line + index + 1, quote))
+    if (line[index] == quote && !open && 
+        (line[index + 1] && ft_strchr(line + index + 1, quote)))
         return (1);
     return (0);
 }

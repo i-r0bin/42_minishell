@@ -8,10 +8,10 @@ void    ft_error(t_data *data, char *arg, char *error)
     ft_putstr_fd("minishell: ", 2);
     if (arg)
     {
-        if (ft_strncmp(data->args[0], "export", 6) == 0)
+        if (ft_strncmp(data->args[0], "export", 7) == 0)
             ft_putchar_fd('`', 2);
         ft_putstr_fd(arg, 2);
-        if (ft_strncmp(data->args[0], "export", 6) == 0)
+        if (ft_strncmp(data->args[0], "export", 7) == 0)
             ft_putchar_fd('\'', 2);
         ft_putstr_fd(": ", 2);
     }
@@ -36,11 +36,40 @@ int ft_isnumber(char *str)
     return (1);
 }
 
-int     check_dir(t_data *data)
+int     check_dir(t_data *data, char *dir)
 {
+    struct stat path_stat;
+    
+    if ((dir[0] == '.' && dir[1] == '/') || dir[0] == '/' || ft_isalpha(dir[0]))
+    {
+        if (stat(dir, &path_stat) != 0)
+        {
+            ft_error(data, dir, "No such file or directory");
+            data->status = 1;
+            return (data->status);
+        }
+    }
+    else if (ft_isdigit(dir[0]))
+    {
+        ft_error(data, dir, "No such file or directory");
+        data->status = 1;
+        return (data->status);
+    }
+    else if (!ft_isalpha(dir[0]) && dir[0] != '$')
+    {
+        ft_error(data, dir, "No such file or directory");
+        data->status = 2;
+        return (data->status);
+    }
+    return (0);
+}
+
+int     check_bin(t_data *data)
+{
+    struct stat path_stat;
+    
     if ((data->args[0][0] == '.' && data->args[0][1] == '/') || data->args[0][0] == '/')
     {
-        struct stat path_stat;
         if (stat(data->args[0], &path_stat) == 0)
         {
             if (S_ISDIR(path_stat.st_mode)) {

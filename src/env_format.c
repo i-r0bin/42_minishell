@@ -74,8 +74,8 @@ void    replace_env(t_data *data, int arg_index, char *key_pos, char *env)
     }
     free(data->args[arg_index]);
     data->args[arg_index] = new_arg;
-    if (ft_strchr(data->args[arg_index], '$') && get_env(ft_strchr(data->args[arg_index], '$'), data))
-        replace_env(data, arg_index, ft_strchr(data->args[arg_index], '$'), get_env(ft_strchr(data->args[arg_index], '$'), data));
+    if (ft_strchr(data->args[arg_index], '$') && get_key_pos(data->args[arg_index]) && get_env(get_key_pos(data->args[arg_index]), data))
+        replace_env(data, arg_index, get_key_pos(data->args[arg_index]), get_env(get_key_pos(data->args[arg_index]), data));
 }
 
 void    remove_quotes(t_data *data, int arg_index, char quote)

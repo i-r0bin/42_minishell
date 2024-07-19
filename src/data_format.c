@@ -47,9 +47,9 @@ int	get_args_num(char const *line)
 	while (line[i] != '\0')
 	{
         if (line[i] == '\"' && !s_quote)
-            d_quote = check_quote(line, i, '\"');
+            d_quote = check_quote(line, i, d_quote, '\"');
         else if (line[i] == '\'' && !d_quote)
-            s_quote = check_quote(line, i, '\'');
+            s_quote = check_quote(line, i, s_quote, '\'');
         if((!d_quote && !s_quote && line[i] != ' ') && line[i + 1] == ' ')
 			n++;
 		i++;
@@ -71,9 +71,9 @@ int	get_arg_size(char const *s)
     while (s[i] && (s[i] != ' ' || d_quote || s_quote))
     {
         if (s[i] == '\"' && !s_quote)
-            d_quote = check_quote(s, i, '\"');
+            d_quote = check_quote(s, i, d_quote, '\"');
         else if (s[i] == '\'' && !d_quote)
-            s_quote = check_quote(s, i, '\'');
+            s_quote = check_quote(s, i, s_quote, '\'');
         if ((!d_quote && !s_quote && s[i] != ' ') || d_quote || s_quote)
             len++;
         i++;
