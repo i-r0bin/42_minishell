@@ -76,17 +76,18 @@ void    exec_here_documents(t_data *data, int index)
     }
     prev_fd = dup(1);
     pipe(fd);
-    dup2(fd[0], fd[1]);
+    dup2(0, fd[0]);
+    //dup2(fd[0], fd[1]);
     while (1)
     {
         line = readline("> ");
-        if (!line || ft_strncmp(line, data->args[index + 1], 
+        if (ft_strncmp(line, data->args[index + 1], 
             ft_strlen(data->args[index + 1]) + 1) == 0)
         {
             free(line);
             break;
         }
-        ft_putendl_fd(line, fd[1]);
+        //ft_putendl_fd(line, fd[1]);
         free(line);
     }
     close(fd[1]);

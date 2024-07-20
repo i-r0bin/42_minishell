@@ -23,7 +23,7 @@ int main(int ac, char **av, char **env)
         free(data.line);
     }
     free_data(&data);
-    ft_putstr_fd("exit\n", 1);
+    ft_putendl_fd("exit", 1);
     exit(data.status);
     return (0);
 }
