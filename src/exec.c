@@ -80,28 +80,58 @@ int    exec_bin_path(t_data *data, char **paths)
 
 void exec_pipe(t_data *data)
 {
-    int i;
+    int i = 0;
     int fd[2];
+    int prev_fd = 0; // To store the read end of the previous pipe
 
-    i = 0;
-    //data->pipe deve essere splittato dagli args
     data->pipe = ft_split(data->cmd, '|');
     while (data->pipe[i])
     {
-        pipe(fd);
-        data->pid = fork();
-        if (data->pid == 0)
+        if (pipe(fd) == -1)
         {
-            set_input_output(data, i, fd);
-            exec_pipe_cmd(data, data->pipe[i]);
+            exit(EXIT_FAILURE);
         }
-        else
+        
+        data->pid = fork();
+        if (data->pid == -1)
         {
-            wait_and_save_exit_status(data);
-            set_fd_pipe(data, fd, i);
+            exit(EXIT_FAILURE);
+        }
+        
+        if (data->pid == 0) // Child process
+        {
+            if (i > 0) // Not the first command
+            {
+                dup2(prev_fd, STDIN_FILENO); // Get input from previous pipe
+                close(prev_fd);
+            }
+            if (data->pipe[i + 1] != NULL) // Not the last command
+            {
+                dup2(fd[1], STDOUT_FILENO); // Output to current pipe
+                close(fd[1]);
+            }
+            close(fd[0]);
+
+            t_data child_data = *data;
+            child_data.args = ft_split(data->pipe[i], ' ');
+            exec_builtin(&child_data);
+
+            // Free resources for the child
+            free(child_data.args);
+            free(data->pipe);
+            exit(EXIT_SUCCESS);
+        }
+        else // Parent process
+        {
+            waitpid(data->pid, &data->status, 0);
+            close(fd[1]);
+            if (i > 0)
+                close(prev_fd); // Close the previous read end
+            prev_fd = fd[0]; // Save the read end for the next command
             i++;
         }
     }
+    close(prev_fd);
     free(data->pipe);
 }
 
