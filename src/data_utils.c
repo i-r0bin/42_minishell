@@ -8,18 +8,23 @@ void	free_data(t_data *data);
 
 void	init_data(t_data *data, char **env)
 {
+    int i;
+
+    i = 0;
 	data->env = NULL;
+    data->env_arr = ft_calloc(get_arr_len(env) + 1, sizeof(char *));
 	while (env && *env)
 	{
+        data->env_arr[i] = ft_strdup(*env);
 		set_env(*env, data, "0");
+        i++;
 		env++;
 	}
-	if (!data->env)
-		data->env = NULL;
 	data->line = NULL;
 	data->cmd = NULL;
 	data->args = NULL;
-	data->pipe = NULL;
+	data->pipes_cmd = NULL;
+    data->pipe_num = 1;
 	data->fd = NULL;
 	data->fd_pipe = NULL;
 	data->fd_in = 0;
@@ -61,10 +66,10 @@ void	exec_cmd(t_data *data)
 			pipe = 1;
 		i++;
 	}
-	if (redir)
-		exec_redirection(data);
-	else if (pipe)
+	if (pipe)
 		exec_pipe(data);
+	else if (redir)
+		exec_redirection(data);
 	else
 		exec_builtin(data);
 }
@@ -87,8 +92,9 @@ void	free_data(t_data *data)
 		ft_lstclear(&data->env, &free_env_node);
 		free(data->env);
 	}
-	if (data->pipe)
-		free_array(data->pipe);
+	if (data->pipes_cmd)
+		free_array(data->pipes_cmd);
+    free_array(data->env_arr);
 	if (data->fd)
 		free(data->fd);
 	if (data->fd_pipe)

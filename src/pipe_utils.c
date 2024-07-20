@@ -12,7 +12,7 @@ void	set_input_output(t_data *data, int i, int fd[2])
 		close(data->fd_pipe[0]);
 		close(data->fd_pipe[1]);
 	}
-	if (data->pipe[i + 1])
+	if (data->pipes_cmd[i + 1])
 		dup2(fd[1], 1);
 	// SEGFAULT HERE
 	close(fd[0]);
@@ -33,7 +33,7 @@ void	set_fd_pipe(t_data *data, int fd[2], int i)
 void	exec_pipe_cmd(t_data *data, char *cmd)
 {
 	// anche qui come in rediractions splittare cmd dagli args
-	data->args = split_args(cmd);
+	//data->args = split_args(cmd);
 	if (ft_strchr(cmd, '>') || ft_strchr(cmd, '<'))
 		exec_redirection(data);
 	else

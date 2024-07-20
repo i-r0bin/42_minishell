@@ -13,7 +13,7 @@ void	exec_builtin(t_data *data)
 	else if (ft_strncmp(data->args[0], "cd", 3) == 0)
 		ft_cd(data);
 	else if (ft_strncmp(data->args[0], "pwd", 4) == 0)
-		ft_pwd(data);
+		ft_pwd();
 	else if (ft_strncmp(data->args[0], "echo", 5) == 0)
 		ft_echo(data);
 	else if (ft_strncmp(data->args[0], "export", 7) == 0)
@@ -80,57 +80,100 @@ int	exec_bin_path(t_data *data, char **paths)
 
 void	exec_pipe(t_data *data)
 {
-	int		i;
 	int		fd[2];
+	int		prev_fd;
+	int		i;
 	t_data	child_data;
+	pid_t	pid;
 
+	split_pipes(data);
+	prev_fd = -1;
 	i = 0;
-	int prev_fd = 0; // To store the read end of the previous pipe
-	data->pipe = ft_split(data->cmd, '|');
-	while (data->pipe[i])
+	while (i < data->pipe_num)
 	{
-		if (pipe(fd) == -1)
+		if (i < data->pipe_num - 1)
 		{
+			if (pipe(fd) == -1)
+			{
+				perror("pipe error");
+				exit(EXIT_FAILURE);
+			}
+		}
+		else
+		{
+			fd[0] = -1;
+			fd[1] = -1;
+		}
+		pid = fork();
+		if (pid == -1)
+		{
+			perror("fork error");
 			exit(EXIT_FAILURE);
 		}
-		data->pid = fork();
-		if (data->pid == -1)
+		if (pid == 0) // Child process
 		{
-			exit(EXIT_FAILURE);
-		}
-		if (data->pid == 0) // Child process
-		{
-			if (i > 0) // Not the first command
+			if (prev_fd != -1) // Not the first command
 			{
 				dup2(prev_fd, STDIN_FILENO); // Get input from previous pipe
 				close(prev_fd);
 			}
-			if (data->pipe[i + 1] != NULL) // Not the last command
+			if (i < data->pipe_num - 1) // Not the last command
 			{
 				dup2(fd[1], STDOUT_FILENO); // Output to current pipe
 				close(fd[1]);
 			}
-			close(fd[0]);
-			child_data = *data;
-			child_data.args = ft_split(data->pipe[i], ' ');
-			exec_builtin(&child_data);
+			if (fd[0] != -1)
+				close(fd[0]);
+			init_data(&child_data, data->env_arr);
+			child_data.line = ft_strdup(data->pipes_cmd[i]);
+			parse_line(&child_data);
 			// Free resources for the child
-			free(child_data.args);
-			free(data->pipe);
+			free_data(&child_data);
+			free(data->pipes_cmd);
 			exit(EXIT_SUCCESS);
 		}
 		else // Parent process
 		{
-			waitpid(data->pid, &data->status, 0);
-			close(fd[1]);
-			if (i > 0)
-				close(prev_fd); // Close the previous read end
-			prev_fd = fd[0];    // Save the read end for the next command
-			i++;
+			if (prev_fd != -1)
+				close(prev_fd);
+			if (fd[1] != -1)
+				close(fd[1]);
+			prev_fd = fd[0];
 		}
+		i++;
 	}
-	close(prev_fd);
-	free(data->pipe);
+	// Wait for all child processes
+	while (wait(NULL) > 0) {}
+}
+
+void	split_pipes(t_data *data)
+{
+	int		len;
+	int		i;
+
+	i = 0;
+	while(data->args[i])
+	{
+		if(ft_strncmp(data->args[i], "|", 2) == 0)
+			data->pipe_num++;
+		i++;
+	}
+	data->pipes_cmd = ft_calloc(data->pipe_num + 1, sizeof(char *));
+	i = 0;
+	len = 0;
+	while(data->args[i])
+	{
+		if(ft_strncmp(data->args[i], "|", 2) == 0 && i > 0)
+			len++;
+		else if (!data->pipes_cmd[len])
+			data->pipes_cmd[len] = ft_strdup(data->args[i]);
+		else
+		{
+			data->pipes_cmd[len] = ft_append_str(data->pipes_cmd[len], " ");
+			data->pipes_cmd[len] = ft_append_str(data->pipes_cmd[len], data->args[i]);
+		}
+		i++;
+	}
 }
 
 void	exec_redirection(t_data *data)

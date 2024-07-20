@@ -38,10 +38,12 @@ typedef struct s_cmd
 typedef struct s_data
 {
 	t_list	*env;
+	char	**env_arr;
 	char	*line;
 	char	*cmd;
 	char	**args;
-	char	**pipe;
+	char	**pipes_cmd;
+	int		pipe_num;
 	int		*fd;
 	int		*fd_pipe;
 	int		fd_in;
@@ -116,6 +118,7 @@ void		write_exp_var(t_list *var);
 t_list		*get_next_sorted_var(t_list *env, char *last);
 int			export_error(t_data *data, char *arg);
 // pipe utils
+void		split_pipes(t_data *data);
 void		set_input_output(t_data *data, int i, int fd[2]);
 void		set_fd_pipe(t_data *data, int fd[2], int i);
 void		exec_pipe_cmd(t_data *data, char *cmd);
