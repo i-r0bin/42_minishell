@@ -22,14 +22,14 @@ char	**split_args(char const *line)
     j = 0;
     while (j < n)
     {
-        tmp = ft_strtrim(tmp, " ");
+        while (*tmp == ' ')
+            tmp++;
         size = get_arg_size(tmp);
         args[j] = ft_calloc(size + 1, sizeof(char));
         ft_strlcpy(args[j], tmp, size + 1);
-        tmp = tmp + size;
+        tmp += size;
         j++;
     }
-    args[j] = 0;
     return (args);
 }
 

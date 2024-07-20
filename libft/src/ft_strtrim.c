@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strtrim.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rilliano <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: rilliano <rilliano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 17:14:37 by rilliano          #+#    #+#             */
-/*   Updated: 2023/01/24 14:27:19 by rilliano         ###   ########.fr       */
+/*   Updated: 2024/07/20 14:05:37 by rilliano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,8 @@ char	*ft_strtrim(char const *s1, char const *set)
 	if (i <= end)
 	{
 		end += 1;
-		return (ft_substr(s1, i, (end - i)));
+		str = ft_substr(s1, i, (end - i));
+		return (str);
 	}
 	str = malloc(sizeof(char));
 	if (!str)

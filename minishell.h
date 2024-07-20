@@ -60,6 +60,7 @@ void    free_env_node(void *env);
 void    free_env_content(void *env);
 int     ft_isnumber(char *str);
 int     get_arr_len(char **arr);
+char    *ft_append_str(char *s1, char *s2);
 //args utils
 void    format_len(char *line, int *i, size_t *len);
 void    format_proc(char *line, char *new_line, int *i, int *len);
