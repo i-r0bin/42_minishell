@@ -12,7 +12,7 @@ int get_key_len(char *key_pos)
     len = 0;
     if (*(key_pos + 1) == '?')
         return (2);
-    while (key_pos[len] != '\0' && key_pos[len] != '/' && key_pos[len] != ' ' && key_pos[len] != '\"' && key_pos[len] != '\'')
+    while (key_pos[len] != '\0' && key_pos[len] != '/' && key_pos[len] != ' ' && key_pos[len] != '\"' && key_pos[len] != '\'' && key_pos[len] != '-')
         len++;
     return (len);
 }
@@ -62,7 +62,7 @@ int	envcmp(const char *s, const char *env)
 			return ((unsigned char)s[i] - (unsigned char)env[i]);
 		i++;
 	}
-	if (s[i] != '\0' && s[i] != ' ' && s[i] != '/' && s[i] != '\"')
+	if (s[i] != '\0' && s[i] != ' ' && s[i] != '/' && s[i] != '\"' && s[i] != '-')
 		return ((unsigned char)s[i] - (unsigned char)env[i]);
 	return (0);
 }
