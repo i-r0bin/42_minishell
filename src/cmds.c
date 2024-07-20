@@ -35,8 +35,8 @@ void	ft_env(t_data *data)
 	tmp = data->env;
 	while (tmp)
 	{
-		if (((char *)tmp->content)[1] != '\0' &&
-				*((char **)tmp->content)[2] == '0')
+		if (((char *)tmp->content)[1] != '\0'
+			&& *((char **)tmp->content)[2] == '0')
 		{
 			ft_putstr_fd(((char **)tmp->content)[0], 1);
 			ft_putchar_fd('=', 1);

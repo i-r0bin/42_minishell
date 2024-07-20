@@ -2,20 +2,20 @@
 # define MINISHELL_H
 
 # include "libft/libft.h"
+# include <errno.h>
+# include <fcntl.h>
+# include <readline/history.h>
+# include <readline/readline.h>
+# include <signal.h>
 # include <stdio.h>
-# include <unistd.h>
 # include <stdlib.h>
 # include <string.h>
+# include <sys/stat.h>
 # include <sys/types.h>
 # include <sys/wait.h>
-# include <sys/stat.h>
-# include <fcntl.h>
-# include <errno.h>
-# include <signal.h>
-# include <readline/readline.h>
-# include <readline/history.h>
+# include <unistd.h>
 
-//non mi pare che ci serve questa struct s_cmd per ora. 
+// non mi pare che ci serve questa struct s_cmd per ora.
 # define PROMPT "minishell$ "
 # define PROMPT_SIZE 11
 # define MAX_CMD_SIZE 4096
@@ -27,103 +27,103 @@
 
 typedef struct s_cmd
 {
-    char	*cmd;
-    char	*args[MAX_CMD_ARGS];
-    char	*pipes[MAX_CMD_PIPES];
-    char	*files[MAX_CMD_FILES];
-    char	*env[MAX_CMD_ENV];
-    char	*path[MAX_CMD_PATH];
-}	t_cmd;
+	char	*cmd;
+	char	*args[MAX_CMD_ARGS];
+	char	*pipes[MAX_CMD_PIPES];
+	char	*files[MAX_CMD_FILES];
+	char	*env[MAX_CMD_ENV];
+	char	*path[MAX_CMD_PATH];
+}			t_cmd;
 
 typedef struct s_data
 {
-    t_list *env;
-    char *line;
-    char *cmd;
-    char **args;
-    char **pipe;
-    int *fd;
-    int *fd_pipe;
-    int fd_in;
-    int fd_out;
-    int status;
-    pid_t pid;
-    int exit;
-} t_data;
+	t_list	*env;
+	char	*line;
+	char	*cmd;
+	char	**args;
+	char	**pipe;
+	int		*fd;
+	int		*fd_pipe;
+	int		fd_in;
+	int		fd_out;
+	int		status;
+	pid_t	pid;
+	int		exit;
+}			t_data;
 
-void    init_data(t_data *data, char **env);
-void    parse_line(t_data *data);
-//data utils
-void    free_data(t_data *data);
-void    free_array(char **array);
-void    free_env_node(void *env);
-void    free_env_content(void *env);
-int     ft_isnumber(char *str);
-int     get_arr_len(char **arr);
-char    *ft_append_str(char *s1, char *s2);
-//args utils
-void    format_len(char *line, int *i, size_t *len);
-void    format_proc(char *line, char *new_line, int *i, int *len);
-char	**split_args(char const *line);
-int     get_args_num(char const *line);
-int     get_arg_size(char const *s);
-int     get_null_args_num(t_data *data);
-void    remove_null_args(t_data *data);
-int check_quote(const char *line, int index, int open, char quote);
-size_t  get_line_len(char *line);
-char    *token_format(char *line);
-//exit utils
-void    signal_handler(int signum);
-void    wait_and_save_exit_status(t_data *data);
-void    ft_error(t_data *data, char *arg, char *error);
-int     check_token_error(t_data *data);
-int     check_bin(t_data *data);
-int     check_dir(t_data *data, char *dir);
-//builtins
-void    ft_pwd();
-void    ft_cd(t_data *data);
-void    ft_env(t_data *data);
-void    ft_unset(t_data *data);
-void    ft_exit(t_data *data);
-void    ft_echo(t_data *data);
-int     newline_flag(char *arg);
-void    ft_export(t_data *data);
-//exec
-void    exec_cmd(t_data *data);
-void    exec_builtin(t_data *data);
-void    exec_redirection(t_data *data);
-void    exec_pipe(t_data *data);
-void    exec_bin(t_data *data);
-int    exec_bin_path(t_data *data, char **paths);
-//envp utils
-void    data_env_format(t_data *data);
-void    replace_env(t_data *data, int arg_index, char *key_pos, char *env);
-void    remove_quotes(t_data *data, int arg_index, char quote);
-int     get_key_len(char *key_pos);
-char    *get_quote(char *arg);
-char    *get_key_pos(char *arg);
-int     envcmp(const char *s, const char *env);
-char    *formatted_arg_allocation(char *arg, int env_len, int key_len);
-char    *get_env(char *key, t_data *data);
-void    set_env(char *arg, t_data *data, char *is_global);
-t_list  *update_env(char *key, char *value, t_data *data);
-void    add_env(char *key, char *value, t_data *data, char *is_global);
-void    unset_env(char *key, t_data *data);
-char    **env_to_array(t_list *env);
-//export utils
-void    print_export(t_data *data);
-void    write_exp_var(t_list *var);
-t_list  *get_next_sorted_var(t_list *env, char *last);
-int     export_error(t_data *data, char *arg);
-//pipe utils
-void    set_input_output(t_data *data, int i, int fd[2]);
-void    set_fd_pipe(t_data *data, int fd[2], int i);
-void    exec_pipe_cmd(t_data *data, char *cmd);
-//redir utils
-void    input_redirection(t_data *data, int index);
-void    output_redirection(t_data *data, int index);
-void    append_redirection(t_data *data, int index);
-void    exec_here_documents(t_data *data, int index);
-void    remove_redir_args(t_data *data, int index);
+void		init_data(t_data *data, char **env);
+void		parse_line(t_data *data);
+// data utils
+void		free_data(t_data *data);
+void		free_array(char **array);
+void		free_env_node(void *env);
+void		free_env_content(void *env);
+int			ft_isnumber(char *str);
+int			get_arr_len(char **arr);
+char		*ft_append_str(char *s1, char *s2);
+// args utils
+void		format_len(char *line, int *i, size_t *len);
+void		format_proc(char *line, char *new_line, int *i, int *len);
+char		**split_args(char const *line);
+int			get_args_num(char const *line);
+int			get_arg_size(char const *s);
+int			get_null_args_num(t_data *data);
+void		remove_null_args(t_data *data);
+int			check_quote(const char *line, int index, int open, char quote);
+size_t		get_line_len(char *line);
+char		*token_format(char *line);
+// exit utils
+void		signal_handler(int signum);
+void		wait_and_save_exit_status(t_data *data);
+void		ft_error(t_data *data, char *arg, char *error);
+int			check_token_error(t_data *data);
+int			check_bin(t_data *data);
+int			check_dir(t_data *data, char *dir);
+// builtins
+void		ft_pwd(void);
+void		ft_cd(t_data *data);
+void		ft_env(t_data *data);
+void		ft_unset(t_data *data);
+void		ft_exit(t_data *data);
+void		ft_echo(t_data *data);
+int			newline_flag(char *arg);
+void		ft_export(t_data *data);
+// exec
+void		exec_cmd(t_data *data);
+void		exec_builtin(t_data *data);
+void		exec_redirection(t_data *data);
+void		exec_pipe(t_data *data);
+void		exec_bin(t_data *data);
+int			exec_bin_path(t_data *data, char **paths);
+// envp utils
+void		data_env_format(t_data *data);
+void		replace_env(t_data *data, int arg_index, char *key_pos, char *env);
+void		remove_quotes(t_data *data, int arg_index, char quote);
+int			get_key_len(char *key_pos);
+char		*get_quote(char *arg);
+char		*get_key_pos(char *arg);
+int			envcmp(const char *s, const char *env);
+char		*formatted_arg_allocation(char *arg, int env_len, int key_len);
+char		*get_env(char *key, t_data *data);
+void		set_env(char *arg, t_data *data, char *is_global);
+t_list		*update_env(char *key, char *value, t_data *data);
+void		add_env(char *key, char *value, t_data *data, char *is_global);
+void		unset_env(char *key, t_data *data);
+char		**env_to_array(t_list *env);
+// export utils
+void		print_export(t_data *data);
+void		write_exp_var(t_list *var);
+t_list		*get_next_sorted_var(t_list *env, char *last);
+int			export_error(t_data *data, char *arg);
+// pipe utils
+void		set_input_output(t_data *data, int i, int fd[2]);
+void		set_fd_pipe(t_data *data, int fd[2], int i);
+void		exec_pipe_cmd(t_data *data, char *cmd);
+// redir utils
+void		input_redirection(t_data *data, int index);
+void		output_redirection(t_data *data, int index);
+void		append_redirection(t_data *data, int index);
+void		exec_here_documents(t_data *data, int index);
+void		remove_redir_args(t_data *data, int index);
 
 #endif
