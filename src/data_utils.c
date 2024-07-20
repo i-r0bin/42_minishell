@@ -83,7 +83,7 @@ void    free_data(t_data *data)
         free_array(data->args);
     if (data->env)
     {
-        ft_lstiter(data->env, &free_env_node);
+        ft_lstclear(&data->env, &free_env_node);
         free(data->env);
     }
     if (data->pipe)

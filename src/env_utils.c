@@ -43,7 +43,7 @@ char    **env_to_array(t_list *env)
     while (tmp)
     {
         array[i] = ft_strjoin(((char **)tmp->content)[0], "=");
-        array[i] = ft_strjoin(array[i], ((char **)tmp->content)[1]);
+        array[i] = ft_append_str(array[i], ((char **)tmp->content)[1]);
         i++;
         tmp = tmp->next;
     }

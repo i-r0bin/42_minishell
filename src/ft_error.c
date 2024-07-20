@@ -114,7 +114,7 @@ int     check_token_error(t_data *data)
         if (token)
         {
             error = ft_strjoin("syntax error near unexpected token `", token);
-            error = ft_strjoin(error, "\'");
+            error = ft_append_str(error, "\'");
             ft_error(data, NULL, error);
             free(token);
             free(error);

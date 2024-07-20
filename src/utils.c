@@ -15,6 +15,16 @@ int get_arr_len(char **arr)
     return (i);
 }
 
+char    *ft_append_str(char *s1, char *s2)
+{
+    char    *tmp;
+
+    tmp = s1;
+    s1 = ft_strjoin(s1, s2);
+    free(tmp);
+    return (s1);
+}
+
 void    free_array(char **array)
 {
     char    **tmp;
