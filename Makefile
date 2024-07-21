@@ -23,7 +23,7 @@ SRC = \
 	$Sft_error.c \
 	$Sutils.c \
 	$Sutils2.c \
-	$Shere_docs.c \
+	$Sredir.c \
 	$Sreplace_env.c \
 	$Scheck_bin.c \
 	$Spipe.c \

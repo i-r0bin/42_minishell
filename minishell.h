@@ -106,5 +106,7 @@ int			output_redirection(t_data *data, int index);
 int			append_redirection(t_data *data, int index);
 int			exec_here_documents(t_data *data, int index);
 void		reformat_redir_args(t_data *data, int index);
+int			check_file_permissions(char *file, int flags);
+void		exec_here_input(t_data *data, int index);
 
 #endif
