@@ -12,9 +12,8 @@
 
 #include "minishell.h"
 
-void	split_pipes(t_data *data)
+void	get_pipe_len(t_data *data)
 {
-	int	len;
 	int	i;
 
 	i = 0;
@@ -24,6 +23,14 @@ void	split_pipes(t_data *data)
 			data->pipe_num++;
 		i++;
 	}
+}
+
+void	split_pipes(t_data *data)
+{
+	int	len;
+	int	i;
+
+	get_pipe_len(data);
 	data->pipes_cmd = ft_calloc(data->pipe_num + 1, sizeof(char *));
 	i = 0;
 	len = 0;
