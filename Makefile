@@ -24,7 +24,8 @@ SRC = \
 	$Sutils.c \
 	$Sutils2.c \
 	$Shere_docs.c \
-	$Sreplace_env.c
+	$Sreplace_env.c \
+	$Scheck_bin.c \
 
 OBJ = $(SRC:$S%.c=$O%.o)
 
