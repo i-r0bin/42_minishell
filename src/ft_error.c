@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cmds.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ppezzull <ppezzull@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/21 03:22:37 by ppezzull          #+#    #+#             */
+/*   Updated: 2024/07/21 03:22:40 by ppezzull         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	ft_error(t_data *data, char *arg, char *error);
@@ -64,41 +76,40 @@ int	check_dir(t_data *data, char *dir)
 	return (0);
 }
 
-int check_bin(t_data *data)
+int	check_bin(t_data *data)
 {
-    struct stat path_stat;
+	struct stat	path_stat;
 
-    // Check if the command is an absolute or relative path
-    if ((data->args[0][0] == '.' && data->args[0][1] == '/')
-        || data->args[0][0] == '/')
-    {
-        if (stat(data->args[0], &path_stat) == 0)
-        {
-            // Check if the path is a directory
-            if (S_ISDIR(path_stat.st_mode))
-            {
-                ft_error(data, data->args[0], "Is a directory");
-                data->status = 126;
-                return data->status;
-            }
-            // Check if the file has execute permissions
-            if ((path_stat.st_mode & S_IXUSR) == 0)
-            {
-                ft_error(data, data->args[0], "Permission denied");
-                data->status = 126;
-                return data->status;
-            }
-        }
-        else
-        {
-            ft_error(data, data->args[0], "No such file or directory");
-            data->status = 127;
-            return data->status;
-        }
-    }
-    return 0;
+	// Check if the command is an absolute or relative path
+	if ((data->args[0][0] == '.' && data->args[0][1] == '/')
+		|| data->args[0][0] == '/')
+	{
+		if (stat(data->args[0], &path_stat) == 0)
+		{
+			// Check if the path is a directory
+			if (S_ISDIR(path_stat.st_mode))
+			{
+				ft_error(data, data->args[0], "Is a directory");
+				data->status = 126;
+				return (data->status);
+			}
+			// Check if the file has execute permissions
+			if ((path_stat.st_mode & S_IXUSR) == 0)
+			{
+				ft_error(data, data->args[0], "Permission denied");
+				data->status = 126;
+				return (data->status);
+			}
+		}
+		else
+		{
+			ft_error(data, data->args[0], "No such file or directory");
+			data->status = 127;
+			return (data->status);
+		}
+	}
+	return (0);
 }
-
 
 int	check_token_error(t_data *data)
 {

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cmds.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ppezzull <ppezzull@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/21 03:22:37 by ppezzull          #+#    #+#             */
+/*   Updated: 2024/07/21 03:22:40 by ppezzull         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	exec_builtin(t_data *data);
@@ -143,34 +155,37 @@ void	exec_pipe(t_data *data)
 		i++;
 	}
 	// Wait for all child processes
-	while (wait(NULL) > 0) {}
+	while (wait(NULL) > 0)
+	{
+	}
 }
 
 void	split_pipes(t_data *data)
 {
-	int		len;
-	int		i;
+	int	len;
+	int	i;
 
 	i = 0;
-	while(data->args[i])
+	while (data->args[i])
 	{
-		if(ft_strncmp(data->args[i], "|", 2) == 0)
+		if (ft_strncmp(data->args[i], "|", 2) == 0)
 			data->pipe_num++;
 		i++;
 	}
 	data->pipes_cmd = ft_calloc(data->pipe_num + 1, sizeof(char *));
 	i = 0;
 	len = 0;
-	while(data->args[i])
+	while (data->args[i])
 	{
-		if(ft_strncmp(data->args[i], "|", 2) == 0 && i > 0)
+		if (ft_strncmp(data->args[i], "|", 2) == 0 && i > 0)
 			len++;
 		else if (!data->pipes_cmd[len])
 			data->pipes_cmd[len] = ft_strdup(data->args[i]);
 		else
 		{
 			data->pipes_cmd[len] = ft_append_str(data->pipes_cmd[len], " ");
-			data->pipes_cmd[len] = ft_append_str(data->pipes_cmd[len], data->args[i]);
+			data->pipes_cmd[len] = ft_append_str(data->pipes_cmd[len],
+					data->args[i]);
 		}
 		i++;
 	}

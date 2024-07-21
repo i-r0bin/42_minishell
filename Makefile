@@ -60,4 +60,9 @@ fclean: clean
 
 re: fclean all
 
+format:
+	@for file in $(SRC) minishell.h; do \
+		c_formatter_42 $$file; \
+	done
+
 .PHONY: all clean fclean re

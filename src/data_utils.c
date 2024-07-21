@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cmds.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ppezzull <ppezzull@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/21 03:22:37 by ppezzull          #+#    #+#             */
+/*   Updated: 2024/07/21 03:22:40 by ppezzull         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	init_data(t_data *data, char **env);
@@ -8,23 +20,23 @@ void	free_data(t_data *data);
 
 void	init_data(t_data *data, char **env)
 {
-    int i;
+	int	i;
 
-    i = 0;
+	i = 0;
 	data->env = NULL;
-    data->env_arr = ft_calloc(get_arr_len(env) + 1, sizeof(char *));
+	data->env_arr = ft_calloc(get_arr_len(env) + 1, sizeof(char *));
 	while (env && *env)
 	{
-        data->env_arr[i] = ft_strdup(*env);
+		data->env_arr[i] = ft_strdup(*env);
 		set_env(*env, data, "0");
-        i++;
+		i++;
 		env++;
 	}
 	data->line = NULL;
 	data->cmd = NULL;
 	data->args = NULL;
 	data->pipes_cmd = NULL;
-    data->pipe_num = 1;
+	data->pipe_num = 1;
 	data->fd = NULL;
 	data->fd_pipe = NULL;
 	data->fd_in = 0;
@@ -94,7 +106,7 @@ void	free_data(t_data *data)
 	}
 	if (data->pipes_cmd)
 		free_array(data->pipes_cmd);
-    free_array(data->env_arr);
+	free_array(data->env_arr);
 	if (data->fd)
 		free(data->fd);
 	if (data->fd_pipe)
