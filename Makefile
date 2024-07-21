@@ -26,6 +26,7 @@ SRC = \
 	$Shere_docs.c \
 	$Sreplace_env.c \
 	$Scheck_bin.c \
+	$Spipe.c \
 
 OBJ = $(SRC:$S%.c=$O%.o)
 

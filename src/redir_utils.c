@@ -26,7 +26,7 @@ int	check_file_permissions(char *file, int flags)
 	return (0);
 }
 
-void	input_redirection(t_data *data, int index)
+int	input_redirection(t_data *data, int index)
 {
 	int	fd;
 	int	prev_fd;
@@ -43,9 +43,10 @@ void	input_redirection(t_data *data, int index)
 	exec_cmd(data);
 	dup2(prev_fd, 0);
 	close(prev_fd);
+	return (1);
 }
 
-void	output_redirection(t_data *data, int index)
+int	output_redirection(t_data *data, int index)
 {
 	int	fd;
 	int	prev_fd;
@@ -54,7 +55,7 @@ void	output_redirection(t_data *data, int index)
 			O_WRONLY | O_CREAT | O_TRUNC) < 0)
 	{
 		data->status = 1;
-		return ;
+		return (1);
 	}
 	prev_fd = dup(1);
 	fd = open(data->args[index + 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
@@ -68,9 +69,10 @@ void	output_redirection(t_data *data, int index)
 	exec_cmd(data);
 	dup2(prev_fd, 1);
 	close(prev_fd);
+	return (1);
 }
 
-void	append_redirection(t_data *data, int index)
+int	append_redirection(t_data *data, int index)
 {
 	int	fd;
 	int	prev_fd;
@@ -79,7 +81,7 @@ void	append_redirection(t_data *data, int index)
 			O_WRONLY | O_CREAT | O_APPEND) < 0)
 	{
 		data->status = 1;
-		return ;
+		return (1);
 	}
 	prev_fd = dup(1);
 	fd = open(data->args[index + 1], O_WRONLY | O_CREAT | O_APPEND, 0644);
@@ -93,6 +95,7 @@ void	append_redirection(t_data *data, int index)
 	exec_cmd(data);
 	dup2(prev_fd, 1);
 	close(prev_fd);
+	return (1);
 }
 
 // void	remove_redir_args(t_data *data, int index)

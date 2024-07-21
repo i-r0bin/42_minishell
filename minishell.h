@@ -124,10 +124,10 @@ void		set_input_output(t_data *data, int i, int fd[2]);
 void		set_fd_pipe(t_data *data, int fd[2], int i);
 void		exec_pipe_cmd(t_data *data, char *cmd);
 // redir utils
-void		input_redirection(t_data *data, int index);
-void		output_redirection(t_data *data, int index);
-void		append_redirection(t_data *data, int index);
-void		exec_here_documents(t_data *data, int index);
+int			input_redirection(t_data *data, int index);
+int			output_redirection(t_data *data, int index);
+int			append_redirection(t_data *data, int index);
+int			exec_here_documents(t_data *data, int index);
 void		remove_redir_args(t_data *data, int index);
 
 #endif

@@ -32,7 +32,7 @@ void	exec_here_input(t_data *data, int index)
 	}
 }
 
-void	exec_here_documents(t_data *data, int index)
+int	exec_here_documents(t_data *data, int index)
 {
 	int		fd[2];
 	int		prev_fd;
@@ -41,7 +41,7 @@ void	exec_here_documents(t_data *data, int index)
 	{
 		ft_putendl_fd("minishell: syntax error near unexpected token `newline'",
 			2);
-		return ;
+		return (1);
 	}
 	prev_fd = dup(1);
 	pipe(fd);
@@ -58,4 +58,5 @@ void	exec_here_documents(t_data *data, int index)
 	exec_cmd(data);
 	dup2(prev_fd, 1);
 	close(prev_fd);
+	return (1);
 }
