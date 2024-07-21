@@ -105,5 +105,6 @@ int			input_redirection(t_data *data, int index);
 int			output_redirection(t_data *data, int index);
 int			append_redirection(t_data *data, int index);
 int			exec_here_documents(t_data *data, int index);
+void		reformat_redir_args(t_data *data, int index);
 
 #endif

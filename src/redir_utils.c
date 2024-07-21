@@ -6,7 +6,7 @@
 /*   By: rilliano <rilliano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 03:22:37 by ppezzull          #+#    #+#             */
-/*   Updated: 2024/07/21 18:55:50 by rilliano         ###   ########.fr       */
+/*   Updated: 2024/07/21 19:13:48 by rilliano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,7 @@ int	input_redirection(t_data *data, int index)
 	fd = open(data->args[index + 1], O_RDONLY);
 	dup2(fd, 0);
 	close(fd);
-	free(data->args[index]);
-	data->args[index] = ft_calloc(1, 1);
-	free(data->args[index + 1]);
-	data->args[index + 1] = ft_calloc(1, 1);
-	remove_null_args(data);
+	reformat_redir_args(data, index);
 	exec_cmd(data);
 	dup2(prev_fd, 0);
 	close(prev_fd);
@@ -61,11 +57,7 @@ int	output_redirection(t_data *data, int index)
 	fd = open(data->args[index + 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	dup2(fd, 1);
 	close(fd);
-	free(data->args[index]);
-	data->args[index] = ft_calloc(1, 1);
-	free(data->args[index + 1]);
-	data->args[index + 1] = ft_calloc(1, 1);
-	remove_null_args(data);
+	reformat_redir_args(data, index);
 	exec_cmd(data);
 	dup2(prev_fd, 1);
 	close(prev_fd);
@@ -87,13 +79,18 @@ int	append_redirection(t_data *data, int index)
 	fd = open(data->args[index + 1], O_WRONLY | O_CREAT | O_APPEND, 0644);
 	dup2(fd, 1);
 	close(fd);
+	reformat_redir_args(data, index);
+	exec_cmd(data);
+	dup2(prev_fd, 1);
+	close(prev_fd);
+	return (1);
+}
+
+void	reformat_redir_args(t_data *data, int index)
+{
 	free(data->args[index]);
 	data->args[index] = ft_calloc(1, 1);
 	free(data->args[index + 1]);
 	data->args[index + 1] = ft_calloc(1, 1);
 	remove_null_args(data);
-	exec_cmd(data);
-	dup2(prev_fd, 1);
-	close(prev_fd);
-	return (1);
 }
