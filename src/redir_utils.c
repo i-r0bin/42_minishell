@@ -121,7 +121,8 @@ void	exec_here_documents(t_data *data, int index)
 		line = readline("> ");
 		data->line = ft_append_str(data->line, "\n");
 		data->line = ft_append_str(data->line, line);
-		if (ft_strncmp(line, data->args[index + 1], ft_strlen(data->args[index + 1]) + 1) == 0)
+		if (ft_strncmp(line, data->args[index + 1],
+				ft_strlen(data->args[index + 1]) + 1) == 0)
 		{
 			data->line = ft_append_str(data->line, "\n");
 			free(line);

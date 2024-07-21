@@ -78,9 +78,12 @@ t_list	*get_next_sorted_var(t_list *env, char *last)
 	tmp = env;
 	while (tmp)
 	{
-		if (!last || ft_strncmp(((char **)tmp->content)[0], last, ft_strlen(last) + 1) > 0)
+		if (!last || ft_strncmp(((char **)tmp->content)[0],
+			last, ft_strlen(last) + 1) > 0)
 		{
-			if (!min || ft_strncmp(((char **)tmp->content)[0], ((char **)min->content)[0], ft_strlen(((char **)min->content)[0]) + 1) < 0)
+			if (!min || ft_strncmp(((char **)tmp->content)[0],
+				((char **)min->content)[0],
+				ft_strlen(((char **)min->content)[0]) + 1) < 0)
 				min = tmp;
 		}
 		tmp = tmp->next;

@@ -37,7 +37,8 @@ char	*get_key_pos(char *arg)
 	i = 0;
 	while (arg[i])
 	{
-		if (arg[i] == '$' && arg[i + 1] != ' ' && arg[i + 1] != '\0' && arg[i + 1] != '\"' && arg[i + 1] != '\'')
+		if (arg[i] == '$' && arg[i + 1] != ' ' && arg[i + 1] != '\0'
+			&& arg[i + 1] != '\"' && arg[i + 1] != '\'')
 			return (arg + i);
 		i++;
 	}
