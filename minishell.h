@@ -15,39 +15,15 @@
 # include <sys/wait.h>
 # include <unistd.h>
 
-// non mi pare che ci serve questa struct s_cmd per ora.
-# define PROMPT "minishell$ "
-# define PROMPT_SIZE 11
-# define MAX_CMD_SIZE 4096
-# define MAX_CMD_ARGS 4096
-# define MAX_CMD_PIPES 4096
-# define MAX_CMD_FILES 4096
-# define MAX_CMD_ENV 4096
-# define MAX_CMD_PATH 4096
-
-typedef struct s_cmd
-{
-	char	*cmd;
-	char	*args[MAX_CMD_ARGS];
-	char	*pipes[MAX_CMD_PIPES];
-	char	*files[MAX_CMD_FILES];
-	char	*env[MAX_CMD_ENV];
-	char	*path[MAX_CMD_PATH];
-}			t_cmd;
-
 typedef struct s_data
 {
 	t_list	*env;
-	char	**env_arr;
 	char	*line;
 	char	*cmd;
 	char	**args;
 	char	**pipes_cmd;
 	int		pipe_num;
-	int		*fd;
-	int		*fd_pipe;
-	int		fd_in;
-	int		fd_out;
+	int		fd_pipe[2];
 	int		status;
 	pid_t	pid;
 	int		exit;
@@ -85,6 +61,7 @@ int			check_dir(t_data *data, char *dir);
 // builtins
 void		ft_pwd(void);
 void		ft_cd(t_data *data);
+void		update_pwd(t_data *data);
 void		ft_env(t_data *data);
 void		ft_unset(t_data *data);
 void		ft_exit(t_data *data);
@@ -121,13 +98,12 @@ int			export_error(t_data *data, char *arg);
 // pipe utils
 void		split_pipes(t_data *data);
 void		set_input_output(t_data *data, int i, int fd[2]);
-void		set_fd_pipe(t_data *data, int fd[2], int i);
+void		set_fd_pipe(t_data *data, int fd[2]);
 void		exec_pipe_cmd(t_data *data, char *cmd);
 // redir utils
 int			input_redirection(t_data *data, int index);
 int			output_redirection(t_data *data, int index);
 int			append_redirection(t_data *data, int index);
 int			exec_here_documents(t_data *data, int index);
-void		remove_redir_args(t_data *data, int index);
 
 #endif

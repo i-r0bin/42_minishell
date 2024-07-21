@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cmds.c                                             :+:      :+:    :+:   */
+/*   redir_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppezzull <ppezzull@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rilliano <rilliano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 03:22:37 by ppezzull          #+#    #+#             */
-/*   Updated: 2024/07/21 03:22:40 by ppezzull         ###   ########.fr       */
+/*   Updated: 2024/07/21 18:55:50 by rilliano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,14 +97,3 @@ int	append_redirection(t_data *data, int index)
 	close(prev_fd);
 	return (1);
 }
-
-// void	remove_redir_args(t_data *data, int index)
-// {
-// 	while (data->args[index + 2])
-// 	{
-// 		data->args[index] = data->args[2 + index];
-// 		index++;
-// 	}
-// 	data->args[index++] = NULL;
-// 	data->args[index] = NULL;
-// }

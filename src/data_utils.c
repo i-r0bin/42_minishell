@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cmds.c                                             :+:      :+:    :+:   */
+/*   data_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppezzull <ppezzull@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rilliano <rilliano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 03:22:37 by ppezzull          #+#    #+#             */
-/*   Updated: 2024/07/21 03:22:40 by ppezzull         ###   ########.fr       */
+/*   Updated: 2024/07/21 18:53:20 by rilliano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,27 +14,19 @@
 
 void	init_data(t_data *data, char **env)
 {
-	int	i;
-
-	i = 0;
 	data->env = NULL;
-	data->env_arr = ft_calloc(get_arr_len(env) + 1, sizeof(char *));
 	while (env && *env)
 	{
-		data->env_arr[i] = ft_strdup(*env);
 		set_env(*env, data, "0");
-		i++;
 		env++;
 	}
 	data->line = NULL;
 	data->cmd = NULL;
 	data->args = NULL;
 	data->pipes_cmd = NULL;
-	data->pipe_num = 1;
-	data->fd = NULL;
-	data->fd_pipe = NULL;
-	data->fd_in = 0;
-	data->fd_out = 1;
+    data->pipe_num = 1;
+	data->fd_pipe[0] = -1;
+	data->fd_pipe[1] = -1;
 	data->status = 0;
 	data->pid = 0;
 	data->exit = 0;
@@ -82,9 +74,11 @@ void	exec_cmd(t_data *data)
 
 void	wait_and_save_exit_status(t_data *data)
 {
-	waitpid(data->pid, &(data->status), 0);
-	if (WIFEXITED(data->status))
-		data->status = WEXITSTATUS(data->status);
+	int	status;
+
+	waitpid(data->pid, &status, 0);
+	if (WIFEXITED(status))
+		data->status = WEXITSTATUS(status);
 }
 
 void	free_data(t_data *data)
@@ -92,17 +86,12 @@ void	free_data(t_data *data)
 	if (data->cmd)
 		free(data->cmd);
 	if (data->args)
-		free_array(data->args);
+		free(data->args);
 	if (data->env)
 	{
 		ft_lstclear(&data->env, &free_env_node);
 		free(data->env);
 	}
 	if (data->pipes_cmd)
-		free_array(data->pipes_cmd);
-	free_array(data->env_arr);
-	if (data->fd)
-		free(data->fd);
-	if (data->fd_pipe)
-		free(data->fd_pipe);
+		free(data->pipes_cmd);
 }
