@@ -12,10 +12,6 @@
 
 #include "minishell.h"
 
-void	set_input_output(t_data *data, int i, int fd[2]);
-void	set_fd_pipe(t_data *data, int fd[2], int i);
-void	exec_pipe_cmd(t_data *data, char *cmd);
-
 void	set_input_output(t_data *data, int i, int fd[2])
 {
 	if (i > 0)

@@ -12,11 +12,6 @@
 
 #include "minishell.h"
 
-void	input_redirection(t_data *data, int index);
-void	output_redirection(t_data *data, int index);
-void	append_redirection(t_data *data, int index);
-// void	remove_redir_args(t_data *data, int index);
-
 int	check_file_permissions(char *file, int flags)
 {
 	int	fd;

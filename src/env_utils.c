@@ -12,11 +12,6 @@
 
 #include "minishell.h"
 
-int		get_key_len(char *key_pos);
-char	*get_key_pos(char *arg);
-char	**env_to_array(t_list *env);
-int		envcmp(const char *s, const char *env);
-
 int	get_key_len(char *key_pos)
 {
 	int	len;

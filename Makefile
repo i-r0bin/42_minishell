@@ -22,6 +22,7 @@ SRC = \
 	$Sredir_utils.c \
 	$Sft_error.c \
 	$Sutils.c \
+	$Sutils2.c \
 	$Shere_docs.c \
 	$Sreplace_env.c
 

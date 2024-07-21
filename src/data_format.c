@@ -12,12 +12,6 @@
 
 #include "minishell.h"
 
-char	**split_args(char const *line);
-int		get_args_num(char const *line);
-int		get_arg_size(char const *s);
-int		get_null_args_num(t_data *data);
-void	remove_null_args(t_data *data);
-
 char	**split_args(char const *line)
 {
 	char	**args;

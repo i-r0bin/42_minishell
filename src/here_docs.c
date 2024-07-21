@@ -12,8 +12,6 @@
 
 #include "minishell.h"
 
-void	exec_here_documents(t_data *data, int index);
-
 void	exec_here_input(t_data *data, int index)
 {
 	char	*line;

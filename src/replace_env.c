@@ -12,8 +12,6 @@
 
 #include "minishell.h"
 
-void	replace_env(t_data *data, int arg_index, char *key_pos, char *env);
-
 void	get_lens(int *env_len, int *key_len, char *key_pos, char *env)
 {
 	if (env)

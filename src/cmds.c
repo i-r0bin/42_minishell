@@ -12,12 +12,6 @@
 
 #include "minishell.h"
 
-void	ft_pwd(void);
-void	ft_cd(t_data *data);
-void	ft_env(t_data *data);
-void	ft_unset(t_data *data);
-void	ft_exit(t_data *data);
-
 void	ft_pwd(void)
 {
 	char	*cwd;

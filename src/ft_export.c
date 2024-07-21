@@ -12,13 +12,6 @@
 
 #include "minishell.h"
 
-void	ft_export(t_data *data);
-void	print_export(t_data *data);
-void	write_exp_var(t_list *var);
-t_list	*get_next_sorted_var(t_list *env, char *last);
-int		export_error(t_data *data, char *arg);
-void	set_env_exp(char *key, t_data *data); // non serve
-
 void	ft_export(t_data *data)
 {
 	int	i;

@@ -12,9 +12,6 @@
 
 #include "minishell.h"
 
-void	ft_echo(t_data *data);
-int		newline_flag(char *arg);
-
 void	ft_echo(t_data *data)
 {
 	int	i;

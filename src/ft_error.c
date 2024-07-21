@@ -12,9 +12,6 @@
 
 #include "minishell.h"
 
-void	ft_error(t_data *data, char *arg, char *error);
-int		ft_isnumber(char *str);
-
 void	ft_error(t_data *data, char *arg, char *error)
 {
 	ft_putstr_fd("minishell: ", 2);

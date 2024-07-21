@@ -12,12 +12,6 @@
 
 #include "minishell.h"
 
-void	exec_builtin(t_data *data);
-void	exec_bin(t_data *data);
-int		exec_bin_path(t_data *data, char **paths);
-void	exec_pipe(t_data *data);
-void	exec_redirection(t_data *data);
-
 void	exec_builtin(t_data *data)
 {
 	if (ft_strncmp(data->args[0], "exit", 5) == 0)

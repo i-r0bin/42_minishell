@@ -12,6 +12,14 @@
 
 #include "minishell.h"
 
+void	init_token_format(int *s_quote, int *d_quote, int *i, int *len)
+{
+	*s_quote = 0;
+	*d_quote = 0;
+	*i = 0;
+	*len = 0;
+}
+
 char	*token_format(char *line)
 {
 	int		s_quote;
@@ -22,10 +30,7 @@ char	*token_format(char *line)
 
 	if (get_line_len(line) == ft_strlen(line))
 		return (line);
-	s_quote = 0;
-	d_quote = 0;
-	i = 0;
-	len = 0;
+	init_token_format(&s_quote, &d_quote, &i, &len);
 	new_line = ft_calloc(get_line_len(line) + 1, sizeof(char));
 	while (line[i] != '\0')
 	{
@@ -108,12 +113,4 @@ void	format_len(char *line, int *i, size_t *len)
 	}
 	if (line[*i] && line[*i] != ' ')
 		(*len)++;
-}
-
-int	check_quote(const char *line, int index, int open, char quote)
-{
-	if (line[index] == quote && !open && (line[index + 1] && ft_strchr(line
-				+ index + 1, quote)))
-		return (1);
-	return (0);
 }

@@ -12,11 +12,6 @@
 
 #include "minishell.h"
 
-void	data_env_format(t_data *data);
-char	*get_quote(char *arg);
-void	remove_quotes(t_data *data, int arg_index, char quote);
-char	*formatted_arg_allocation(char *arg, int env_len, int key_len);
-
 void	data_env_format(t_data *data)
 {
 	int		i;

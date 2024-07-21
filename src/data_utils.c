@@ -12,12 +12,6 @@
 
 #include "minishell.h"
 
-void	init_data(t_data *data, char **env);
-void	parse_line(t_data *data);
-void	exec_cmd(t_data *data);
-void	wait_and_save_exit_status(t_data *data);
-void	free_data(t_data *data);
-
 void	init_data(t_data *data, char **env)
 {
 	int	i;
