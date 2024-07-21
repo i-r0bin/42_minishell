@@ -37,8 +37,7 @@ char	*get_key_pos(char *arg)
 	i = 0;
 	while (arg[i])
 	{
-		if (arg[i] == '$' && arg[i + 1] != ' ' && arg[i + 1] != '\0' && arg[i
-			+ 1] != '\"' && arg[i + 1] != '\'')
+		if (arg[i] == '$' && arg[i + 1] != ' ' && arg[i + 1] != '\0' && arg[i + 1] != '\"' && arg[i + 1] != '\'')
 			return (arg + i);
 		i++;
 	}
@@ -67,7 +66,7 @@ char	**env_to_array(t_list *env)
 
 int	envcmp(const char *s, const char *env)
 {
-	size_t i;
+	size_t	i;
 
 	i = 0;
 	while (env[i] != '\0')

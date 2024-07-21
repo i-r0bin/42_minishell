@@ -45,7 +45,7 @@ void	ft_echo(t_data *data)
 
 int	newline_flag(char *arg)
 {
-	int i;
+	int	i;
 
 	i = 1;
 	while (arg[i] == 'n')

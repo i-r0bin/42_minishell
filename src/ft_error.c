@@ -80,20 +80,17 @@ int	check_bin(t_data *data)
 {
 	struct stat	path_stat;
 
-	// Check if the command is an absolute or relative path
 	if ((data->args[0][0] == '.' && data->args[0][1] == '/')
 		|| data->args[0][0] == '/')
 	{
 		if (stat(data->args[0], &path_stat) == 0)
 		{
-			// Check if the path is a directory
 			if (S_ISDIR(path_stat.st_mode))
 			{
 				ft_error(data, data->args[0], "Is a directory");
 				data->status = 126;
 				return (data->status);
 			}
-			// Check if the file has execute permissions
 			if ((path_stat.st_mode & S_IXUSR) == 0)
 			{
 				ft_error(data, data->args[0], "Permission denied");
@@ -113,9 +110,9 @@ int	check_bin(t_data *data)
 
 int	check_token_error(t_data *data)
 {
-	int i;
-	char *token;
-	char *error;
+	int		i;
+	char	*token;
+	char	*error;
 
 	i = 0;
 	while (data->args[i])

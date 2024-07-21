@@ -122,16 +122,16 @@ void	exec_pipe(t_data *data)
 			perror("fork error");
 			exit(EXIT_FAILURE);
 		}
-		if (pid == 0) // Child process
+		if (pid == 0)
 		{
-			if (prev_fd != -1) // Not the first command
+			if (prev_fd != -1)
 			{
-				dup2(prev_fd, STDIN_FILENO); // Get input from previous pipe
+				dup2(prev_fd, STDIN_FILENO);
 				close(prev_fd);
 			}
-			if (i < data->pipe_num - 1) // Not the last command
+			if (i < data->pipe_num - 1)
 			{
-				dup2(fd[1], STDOUT_FILENO); // Output to current pipe
+				dup2(fd[1], STDOUT_FILENO);
 				close(fd[1]);
 			}
 			if (fd[0] != -1)
@@ -139,12 +139,11 @@ void	exec_pipe(t_data *data)
 			init_data(&child_data, data->env_arr);
 			child_data.line = ft_strdup(data->pipes_cmd[i]);
 			parse_line(&child_data);
-			// Free resources for the child
 			free_data(&child_data);
 			free(data->pipes_cmd);
 			exit(EXIT_SUCCESS);
 		}
-		else // Parent process
+		else
 		{
 			if (prev_fd != -1)
 				close(prev_fd);
@@ -154,7 +153,6 @@ void	exec_pipe(t_data *data)
 		}
 		i++;
 	}
-	// Wait for all child processes
 	while (wait(NULL) > 0)
 	{
 	}
@@ -193,7 +191,7 @@ void	split_pipes(t_data *data)
 
 void	exec_redirection(t_data *data)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (data->args[i])

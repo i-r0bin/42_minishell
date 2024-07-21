@@ -111,10 +111,10 @@ int	get_null_args_num(t_data *data)
 
 void	remove_null_args(t_data *data)
 {
-	int i;
-	int j;
-	int null_args;
-	char **new_arr;
+	int		i;
+	int		j;
+	int		null_args;
+	char	**new_arr;
 
 	null_args = get_null_args_num(data);
 	if (null_args)

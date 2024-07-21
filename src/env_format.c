@@ -67,8 +67,14 @@ void	replace_env(t_data *data, int arg_index, char *key_pos, char *env)
 	int		env_len;
 	int		key_len;
 
-	env_len = env ? ft_strlen(env) : 0;
-	key_len = key_pos && *(key_pos + 1) != ' ' ? get_key_len(key_pos) : 0;
+	if (env)
+		env_len = ft_strlen(env);
+	else
+		env_len = 0;
+	if (key_pos && *(key_pos + 1) != ' ')
+		key_len = get_key_len(key_pos);
+	else
+		key_len = 0;
 	new_arg = formatted_arg_allocation(data->args[arg_index], env_len, key_len);
 	k = 0;
 	j = 0;
@@ -117,8 +123,8 @@ void	remove_quotes(t_data *data, int arg_index, char quote)
 
 char	*formatted_arg_allocation(char *arg, int env_len, int key_len)
 {
-	int len;
-	char *new_arg;
+	int		len;
+	char	*new_arg;
 
 	len = ft_strlen(arg) + env_len - key_len;
 	new_arg = ft_calloc(len + 1, sizeof(char));

@@ -95,9 +95,9 @@ void	add_env(char *key, char *value, t_data *data, char *is_global)
 
 void	unset_env(char *key, t_data *data)
 {
-	t_list *tmp;
-	t_list *prev;
-	t_list *next;
+	t_list	*tmp;
+	t_list	*prev;
+	t_list	*next;
 
 	tmp = data->env;
 	prev = tmp;
