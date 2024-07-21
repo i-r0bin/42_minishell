@@ -6,7 +6,7 @@
 /*   By: rilliano <rilliano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 03:22:37 by ppezzull          #+#    #+#             */
-/*   Updated: 2024/07/21 19:00:12 by rilliano         ###   ########.fr       */
+/*   Updated: 2024/07/21 19:41:17 by rilliano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,4 +96,5 @@ void	exec_pipe(t_data *data)
 		i++;
 	}
 	wait_and_save_exit_status(data);
+	free(data->pipes_cmd);
 }
