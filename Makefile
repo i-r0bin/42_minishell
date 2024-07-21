@@ -21,7 +21,9 @@ SRC = \
 	$Spipe_utils.c \
 	$Sredir_utils.c \
 	$Sft_error.c \
-	$Sutils.c
+	$Sutils.c \
+	$Shere_docs.c \
+	$Sreplace_env.c
 
 OBJ = $(SRC:$S%.c=$O%.o)
 

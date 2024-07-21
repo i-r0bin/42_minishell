@@ -14,7 +14,6 @@
 
 void	data_env_format(t_data *data);
 char	*get_quote(char *arg);
-void	replace_env(t_data *data, int arg_index, char *key_pos, char *env);
 void	remove_quotes(t_data *data, int arg_index, char quote);
 char	*formatted_arg_allocation(char *arg, int env_len, int key_len);
 
@@ -57,46 +56,6 @@ char	*get_quote(char *arg)
 		i++;
 	}
 	return (NULL);
-}
-
-void	replace_env(t_data *data, int arg_index, char *key_pos, char *env)
-{
-	char	*new_arg;
-	int		j;
-	int		k;
-	int		env_len;
-	int		key_len;
-
-	if (env)
-		env_len = ft_strlen(env);
-	else
-		env_len = 0;
-	if (key_pos && *(key_pos + 1) != ' ')
-		key_len = get_key_len(key_pos);
-	else
-		key_len = 0;
-	new_arg = formatted_arg_allocation(data->args[arg_index], env_len, key_len);
-	k = 0;
-	j = 0;
-	while (data->args[arg_index][j])
-	{
-		if (data->args[arg_index][j] == '$' && key_pos)
-		{
-			while (env && *env)
-				new_arg[k++] = *(env++);
-			j += key_len;
-			key_pos = NULL;
-		}
-		else
-			new_arg[k++] = data->args[arg_index][j++];
-	}
-	free(data->args[arg_index]);
-	data->args[arg_index] = new_arg;
-	if (ft_strchr(data->args[arg_index], '$')
-		&& get_key_pos(data->args[arg_index])
-		&& get_env(get_key_pos(data->args[arg_index]), data))
-		replace_env(data, arg_index, get_key_pos(data->args[arg_index]),
-			get_env(get_key_pos(data->args[arg_index]), data));
 }
 
 void	remove_quotes(t_data *data, int arg_index, char quote)
