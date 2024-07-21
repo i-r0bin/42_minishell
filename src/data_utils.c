@@ -6,7 +6,7 @@
 /*   By: rilliano <rilliano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 03:22:37 by ppezzull          #+#    #+#             */
-/*   Updated: 2024/07/21 19:45:45 by rilliano         ###   ########.fr       */
+/*   Updated: 2024/07/21 20:00:50 by rilliano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	init_data(t_data *data, char **env)
 	data->cmd = NULL;
 	data->args = NULL;
 	data->pipes_cmd = NULL;
-    data->pipe_num = 1;
+	data->pipe_num = 1;
 	data->fd_pipe[0] = -1;
 	data->fd_pipe[1] = -1;
 	data->status = 0;

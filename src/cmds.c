@@ -6,7 +6,7 @@
 /*   By: rilliano <rilliano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 03:22:37 by ppezzull          #+#    #+#             */
-/*   Updated: 2024/07/21 18:53:55 by rilliano         ###   ########.fr       */
+/*   Updated: 2024/07/21 19:58:24 by rilliano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,22 +40,6 @@ void	ft_cd(t_data *data)
 		}
 	}
 	update_pwd(data);
-}
-
-void	update_pwd(t_data *data)
-{
-	char	*old_pwd;
-	char	*cwd;
-	char	*new_pwd;
-
-	old_pwd = ft_strjoin("OLDPWD=", get_env("$PWD", data));
-	set_env(old_pwd, data, "0");
-	free(old_pwd);
-	cwd = getcwd(NULL, 0);
-	new_pwd = ft_strjoin("PWD=", cwd);
-	set_env(new_pwd, data, "0");
-	free(cwd);
-	free(new_pwd);
 }
 
 void	ft_env(t_data *data)
