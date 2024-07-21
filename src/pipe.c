@@ -6,7 +6,7 @@
 /*   By: rilliano <rilliano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 03:22:37 by ppezzull          #+#    #+#             */
-/*   Updated: 2024/07/21 19:41:17 by rilliano         ###   ########.fr       */
+/*   Updated: 2024/07/21 21:14:49 by rilliano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,14 +87,16 @@ void	exec_pipe(t_data *data)
 			init_data(&child_data, envp);
 			child_data.line = ft_strdup(data->pipes_cmd[i]);
 			parse_line(&child_data);
-			exit(child_data.status);
 			free_data(&child_data);
-			free(envp);
+			free_array(envp);
+			exit(child_data.status);
 		}
 		else
 			set_fd_pipe(data, fd);
 		i++;
 	}
 	wait_and_save_exit_status(data);
-	free(data->pipes_cmd);
+	free_array(data->pipes_cmd);
+	data->pipes_cmd = NULL;
+	data->pipe_num = 1;
 }

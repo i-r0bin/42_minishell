@@ -6,7 +6,7 @@
 /*   By: rilliano <rilliano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 03:22:37 by ppezzull          #+#    #+#             */
-/*   Updated: 2024/07/21 20:00:50 by rilliano         ###   ########.fr       */
+/*   Updated: 2024/07/21 21:43:55 by rilliano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,12 +86,12 @@ void	free_data(t_data *data)
 	if (data->cmd)
 		free(data->cmd);
 	if (data->args)
-		free(data->args);
+		free_array(data->args);
 	if (data->env)
 	{
 		ft_lstclear(&data->env, &free_env_node);
 		free(data->env);
 	}
 	if (data->pipes_cmd)
-		free(data->pipes_cmd);
+		free_array(data->pipes_cmd);
 }
