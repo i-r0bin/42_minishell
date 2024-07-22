@@ -6,7 +6,7 @@
 /*   By: rilliano <rilliano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 03:22:37 by ppezzull          #+#    #+#             */
-/*   Updated: 2024/07/21 21:14:49 by rilliano         ###   ########.fr       */
+/*   Updated: 2024/07/22 13:09:18 by rilliano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ void	exec_pipe(t_data *data)
 		i++;
 	}
 	wait_and_save_exit_status(data);
+	while (wait(NULL) > 0) {}
 	free_array(data->pipes_cmd);
 	data->pipes_cmd = NULL;
 	data->pipe_num = 1;

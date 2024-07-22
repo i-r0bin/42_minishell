@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cmds.c                                             :+:      :+:    :+:   */
+/*   env_data.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppezzull <ppezzull@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rilliano <rilliano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 03:22:37 by ppezzull          #+#    #+#             */
-/*   Updated: 2024/07/21 03:22:40 by ppezzull         ###   ########.fr       */
+/*   Updated: 2024/07/22 12:02:14 by rilliano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ void	add_env(char *key, char *value, t_data *data, char *is_global)
 
 	map = ft_calloc(4, sizeof(char *));
 	map[0] = ft_strdup(key);
-	if(value)
+	if (value)
 		map[1] = ft_strdup(value);
 	map[2] = ft_strdup(is_global);
 	ft_lstadd_back(&(data->env), ft_lstnew(map));

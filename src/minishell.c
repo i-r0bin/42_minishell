@@ -6,7 +6,7 @@
 /*   By: rilliano <rilliano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 03:22:37 by ppezzull          #+#    #+#             */
-/*   Updated: 2024/07/21 21:44:33 by rilliano         ###   ########.fr       */
+/*   Updated: 2024/07/22 13:15:24 by rilliano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,11 @@ void	signal_handler(int signum)
 	if (signum == SIGINT)
 	{
 		ft_putchar_fd('\n', 1);
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
+		if (wait(NULL) < 0)
+		{
+			rl_on_new_line();
+			rl_replace_line("", 0);
+			rl_redisplay();
+		}
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: rilliano <rilliano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 03:22:37 by ppezzull          #+#    #+#             */
-/*   Updated: 2024/07/21 21:19:06 by rilliano         ###   ########.fr       */
+/*   Updated: 2024/07/22 12:52:54 by rilliano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,6 @@ void	exec_bin(t_data *data)
 int	exec_bin_path(t_data *data, char **paths)
 {
 	char		*cmd;
-	int			pid;
 	int			i;
 	struct stat	path_stat;
 
@@ -67,11 +66,10 @@ int	exec_bin_path(t_data *data, char **paths)
 	while (paths[i])
 	{
 		cmd = ft_strjoin(ft_strjoin(paths[i], "/"), data->args[0]);
-		pid = fork();
-		if (pid == 0)
+		data->pid = fork();
+		if (data->pid == 0)
 		{
 			execve(cmd, data->args, env_to_array(data->env));
-			while (wait(NULL) > 0) {}
 			exit(EXIT_FAILURE);
 		}
 		else
