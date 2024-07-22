@@ -6,7 +6,7 @@
 /*   By: rilliano <rilliano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 03:22:37 by ppezzull          #+#    #+#             */
-/*   Updated: 2024/07/21 20:11:20 by rilliano         ###   ########.fr       */
+/*   Updated: 2024/07/22 17:07:25 by rilliano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ void	replace_env(t_data *data, int arg_index, char *key_pos, char *env)
 {
 	char	*new_arg;
 
+	if (!key_pos && !env)
+		return ;
 	new_arg = get_new_arg(data, arg_index, key_pos, env);
 	free(data->args[arg_index]);
 	data->args[arg_index] = new_arg;

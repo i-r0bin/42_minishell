@@ -6,7 +6,7 @@
 /*   By: rilliano <rilliano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 03:22:37 by ppezzull          #+#    #+#             */
-/*   Updated: 2024/07/22 12:52:54 by rilliano         ###   ########.fr       */
+/*   Updated: 2024/07/22 16:58:04 by rilliano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ void	exec_builtin(t_data *data)
 void	exec_bin(t_data *data)
 {
 	char	**paths;
+	char	**envp;
 	int		err;
 
 	if (!get_env("PATH", data))
@@ -46,8 +47,10 @@ void	exec_bin(t_data *data)
 		return ;
 	err = 0;
 	paths = ft_split(get_env("PATH", data), ':');
-	if (execve(data->args[0], data->args, env_to_array(data->env)) == -1)
-		err = exec_bin_path(data, paths);
+	envp = env_to_array(data->env);
+	if (execve(data->args[0], data->args, envp) == -1)
+		err = exec_bin_path(data, paths, envp);
+	free_array(envp);
 	if (!err)
 	{
 		ft_error(data, data->args[0], "command not found");
@@ -56,7 +59,7 @@ void	exec_bin(t_data *data)
 	free_array(paths);
 }
 
-int	exec_bin_path(t_data *data, char **paths)
+int	exec_bin_path(t_data *data, char **paths, char **envp)
 {
 	char		*cmd;
 	int			i;
@@ -65,20 +68,22 @@ int	exec_bin_path(t_data *data, char **paths)
 	i = 0;
 	while (paths[i])
 	{
-		cmd = ft_strjoin(ft_strjoin(paths[i], "/"), data->args[0]);
+		cmd = ft_strjoin(paths[i], "/");
+		cmd = ft_append_str(cmd, data->args[0]);
 		data->pid = fork();
 		if (data->pid == 0)
 		{
-			execve(cmd, data->args, env_to_array(data->env));
+			execve(cmd, data->args, envp);
 			exit(EXIT_FAILURE);
 		}
-		else
+		wait_and_save_exit_status(data);
+		if (stat(cmd, &path_stat) == 0)
 		{
-			wait_and_save_exit_status(data);
-			if (stat(cmd, &path_stat) == 0)
-				return (1);
-			i++;
+			free(cmd);
+			return (1);
 		}
+		free(cmd);
+		i++;
 	}
 	return (0);
 }

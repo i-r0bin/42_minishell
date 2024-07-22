@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cmds.c                                             :+:      :+:    :+:   */
+/*   token_format.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppezzull <ppezzull@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rilliano <rilliano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 03:22:37 by ppezzull          #+#    #+#             */
-/*   Updated: 2024/07/21 03:22:40 by ppezzull         ###   ########.fr       */
+/*   Updated: 2024/07/22 16:13:47 by rilliano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ char	*token_format(char *line)
 		else if (line[i])
 			new_line[len++] = line[i++];
 	}
+	free(line);
 	return (new_line);
 }
 

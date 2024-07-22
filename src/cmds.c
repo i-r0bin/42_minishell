@@ -6,7 +6,7 @@
 /*   By: rilliano <rilliano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 03:22:37 by ppezzull          #+#    #+#             */
-/*   Updated: 2024/07/21 19:58:24 by rilliano         ###   ########.fr       */
+/*   Updated: 2024/07/22 18:00:57 by rilliano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,19 +25,25 @@ void	ft_cd(t_data *data)
 {
 	char	*path;
 
-	if (data->args[2])
-		ft_error(data, NULL, "too many arguments");
-	else
+	if (data->args[1] && data->args[2])
 	{
-		if (data->args[1])
-			path = data->args[1];
-		else
-			path = get_env("$HOME", data);
-		if (chdir(path) == -1)
-		{
-			ft_error(data, path, "No such file or directory");
-			return ;
-		}
+		ft_error(data, NULL, "too many arguments");
+		return ;
+	}
+	else if (data->args[1] && ft_strncmp(data->args[1], "-", 2) == 0
+		&& get_env("$OLDPWD", data))
+		path = get_env("$OLDPWD", data);
+	else if (data->args[1] && ft_strncmp(data->args[1], "~", 2) != 0
+		&& ft_strncmp(data->args[1], "-", 2) != 0)
+		path = data->args[1];
+	if (!data->args[1] || (ft_strncmp(data->args[1], "~", 2) == 0
+			|| (ft_strncmp(data->args[1], "-", 2) == 0
+				&& !get_env("$OLDPWD", data))))
+		path = get_env("$HOME", data);
+	if (chdir(path) == -1)
+	{
+		ft_error(data, path, "No such file or directory");
+		return ;
 	}
 	update_pwd(data);
 }

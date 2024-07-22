@@ -6,7 +6,7 @@
 /*   By: rilliano <rilliano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 03:22:37 by ppezzull          #+#    #+#             */
-/*   Updated: 2024/07/21 21:43:55 by rilliano         ###   ########.fr       */
+/*   Updated: 2024/07/22 16:32:18 by rilliano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,11 +74,9 @@ void	exec_cmd(t_data *data)
 
 void	wait_and_save_exit_status(t_data *data)
 {
-	int	status;
-
-	waitpid(data->pid, &status, 0);
-	if (WIFEXITED(status))
-		data->status = WEXITSTATUS(status);
+	waitpid(data->pid, &data->status, 0);
+	if (WIFEXITED(data->status))
+		data->status = WEXITSTATUS(data->status);
 }
 
 void	free_data(t_data *data)

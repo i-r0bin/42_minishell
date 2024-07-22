@@ -74,7 +74,7 @@ void		exec_builtin(t_data *data);
 void		exec_redirection(t_data *data);
 void		exec_pipe(t_data *data);
 void		exec_bin(t_data *data);
-int			exec_bin_path(t_data *data, char **paths);
+int			exec_bin_path(t_data *data, char **paths, char **envp);
 // envp utils
 void		data_env_format(t_data *data);
 void		replace_env(t_data *data, int arg_index, char *key_pos, char *env);

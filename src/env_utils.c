@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cmds.c                                             :+:      :+:    :+:   */
+/*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppezzull <ppezzull@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rilliano <rilliano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 03:22:37 by ppezzull          #+#    #+#             */
-/*   Updated: 2024/07/21 03:22:40 by ppezzull         ###   ########.fr       */
+/*   Updated: 2024/07/22 16:39:22 by rilliano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,14 @@ char	**env_to_array(t_list *env)
 	array = (char **)malloc(sizeof(char *) * (ft_lstsize(env) + 1));
 	while (tmp)
 	{
-		array[i] = ft_strjoin(((char **)tmp->content)[0], "=");
-		array[i] = ft_append_str(array[i], ((char **)tmp->content)[1]);
+		if(((char **)tmp->content)[1])
+		{
+			array[i] = ft_strjoin(((char **)tmp->content)[0], "=");
+			if(((char **)tmp->content)[1][0])
+				array[i] = ft_append_str(array[i], ((char **)tmp->content)[1]);
+		}
+		else
+			array[i] = ft_strdup(((char **)tmp->content)[0]);
 		i++;
 		tmp = tmp->next;
 	}
