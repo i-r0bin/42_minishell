@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cmds.c                                             :+:      :+:    :+:   */
+/*   ft_error.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppezzull <ppezzull@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rilliano <rilliano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 03:22:37 by ppezzull          #+#    #+#             */
-/*   Updated: 2024/07/21 03:22:40 by ppezzull         ###   ########.fr       */
+/*   Updated: 2024/07/22 20:27:46 by rilliano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,38 +80,35 @@ int	check_token_error(t_data *data)
 	char	*error;
 
 	i = 0;
+	token = NULL;
 	while (data->args[i])
 	{
-		token = NULL;
-		check_token_helper(data, &token, i);
-		if (token)
+		if (is_token(data, i) && (!data->args[i + 1] || is_token(data, i + 1)))
 		{
-			error = ft_strjoin("syntax error near unexpected token `", token);
-			error = ft_append_str(error, "\'");
-			ft_error(data, NULL, error);
-			free(token);
-			free(error);
-			return (1);
+			if (!data->args[i + 1])
+				ft_strlcpy(token, "newline", 7);
+			else if (ft_strncmp(data->args[i], "|", 2) != 0 || ft_strncmp(data->args[i + 1], "|", 2) == 0)
+				token = data->args[i + 1];
+			if (token)
+			{
+				error = ft_strjoin("syntax error near unexpected token `", token);
+				error = ft_append_str(error, "\'");
+				ft_error(data, NULL, error);
+				free(token);
+				free(error);
+				return (1);
+			}
 		}
 		i++;
 	}
 	return (0);
 }
 
-void	check_token_helper(t_data *data, char **token, int i)
+int	is_token(t_data *data, int i)
 {
-	if (data->args[i][0] == '<' || data->args[i][0] == '>'
-		|| data->args[i][0] == '|')
-	{
-		if (ft_strlen(data->args[i]) > 2 && data->args[i][0] != '|')
-		{
-			*token = ft_calloc(3, sizeof(char));
-			ft_strlcpy(*token, data->args[i], 3);
-		}
-		else if (data->args[i][1] && data->args[i][0] != data->args[i][1])
-		{
-			*token = ft_calloc(2, sizeof(char));
-			*token[0] = data->args[i][0];
-		}
-	}
+	if (ft_strncmp(data->args[i], ">", 2) == 0 || ft_strncmp(data->args[i], ">>", 3) == 0
+	|| ft_strncmp(data->args[i], "<", 2) == 0 || ft_strncmp(data->args[i], "<<", 3) == 0
+	|| ft_strncmp(data->args[i], "|", 2) == 0)
+			return (1);
+	return (0);
 }

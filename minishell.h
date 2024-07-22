@@ -55,7 +55,7 @@ void		signal_handler(int signum);
 void		wait_and_save_exit_status(t_data *data);
 void		ft_error(t_data *data, char *arg, char *error);
 int			check_token_error(t_data *data);
-void		check_token_helper(t_data *data, char **token, int i);
+int			is_token(t_data *data, int i);
 int			check_bin(t_data *data);
 int			check_dir(t_data *data, char *dir);
 // builtins

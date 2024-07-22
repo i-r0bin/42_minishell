@@ -6,7 +6,7 @@
 /*   By: rilliano <rilliano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 03:22:37 by ppezzull          #+#    #+#             */
-/*   Updated: 2024/07/22 16:13:47 by rilliano         ###   ########.fr       */
+/*   Updated: 2024/07/22 19:51:13 by rilliano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,16 +50,17 @@ char	*token_format(char *line)
 
 void	format_proc(char *line, char *new_line, int *i, int *len)
 {
+	char	token;
+
+	token = line[*i];
 	if (*i > 0 && line[*i - 1] != ' ')
 		new_line[(*len)++] = ' ';
-	if (line[*i] == '|')
+	if (token == '|')
+		new_line[(*len)++] = line[(*i)++];
+	else if (token == '<' || token == '>')
 	{
-		while (line[*i] == '|')
-			new_line[(*len)++] = line[(*i)++];
-	}
-	else
-	{
-		while (line[*i] == '<' || line[*i] == '>')
+		new_line[(*len)++] = line[(*i)++];
+		if (line[*i] && line[*i] == token)
 			new_line[(*len)++] = line[(*i)++];
 	}
 	if (line[*i] && line[*i] != ' ')
@@ -94,19 +95,21 @@ size_t	get_line_len(char *line)
 
 void	format_len(char *line, int *i, size_t *len)
 {
+	char	token;
+	
+	token = line[*i];
 	if (*i > 0 && line[*i - 1] != ' ')
 		(*len)++;
-	if (line[*i] == '|')
+	if (token == '|')
 	{
-		while (line[*i] == '|')
-		{
-			(*i)++;
-			(*len)++;
-		}
+		(*i)++;
+		(*len)++;
 	}
-	else
+	else if (token == '<' || token == '>')
 	{
-		while (line[*i] == '<' || line[*i] == '>')
+		(*i)++;
+		(*len)++;
+		if (line[*i] && line[*i] == token)
 		{
 			(*i)++;
 			(*len)++;
