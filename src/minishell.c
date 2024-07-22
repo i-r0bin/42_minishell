@@ -23,7 +23,6 @@ int	main(int ac, char **av, char **env)
 	signal(SIGQUIT, SIG_IGN);
 	while (data.exit == 0)
 	{
-		while (wait(NULL) > 0) {}
 		data.line = readline("minishell$ ");
 		if (!data.line)
 			break ;
@@ -45,7 +44,7 @@ void	signal_handler(int signum)
 {
 	if (signum == SIGINT)
 	{
-		write(1, "\n", 1);
+		ft_putchar_fd('\n', 1);
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();

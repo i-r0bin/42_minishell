@@ -46,7 +46,7 @@ void	set_env(char *arg, t_data *data, char *is_global)
 			value = "";
 	}
 	env = update_env(key, value, data);
-	if (!env && value)
+	if (!env)
 		add_env(key, value, data, is_global);
 	free(key);
 }
@@ -82,7 +82,8 @@ void	add_env(char *key, char *value, t_data *data, char *is_global)
 
 	map = ft_calloc(4, sizeof(char *));
 	map[0] = ft_strdup(key);
-	map[1] = ft_strdup(value);
+	if(value)
+		map[1] = ft_strdup(value);
 	map[2] = ft_strdup(is_global);
 	ft_lstadd_back(&(data->env), ft_lstnew(map));
 }

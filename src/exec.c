@@ -53,7 +53,6 @@ void	exec_bin(t_data *data)
 		ft_error(data, data->args[0], "command not found");
 		data->status = 127;
 	}
-	wait_and_save_exit_status(data);
 	free_array(paths);
 }
 
@@ -72,6 +71,7 @@ int	exec_bin_path(t_data *data, char **paths)
 		if (pid == 0)
 		{
 			execve(cmd, data->args, env_to_array(data->env));
+			while (wait(NULL) > 0) {}
 			exit(EXIT_FAILURE);
 		}
 		else
