@@ -6,7 +6,7 @@
 /*   By: rilliano <rilliano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 03:22:37 by ppezzull          #+#    #+#             */
-/*   Updated: 2024/07/22 13:09:18 by rilliano         ###   ########.fr       */
+/*   Updated: 2024/07/23 18:23:33 by rilliano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,9 +79,11 @@ void	execute_child_process(t_data *data, int i, int fd[2])
 void	exec_pipe(t_data *data)
 {
 	split_pipes(data);
-	data->pipe_num = get_pipe_count(data->pipes_cmd);
 	handle_pipes(data);
 	wait_and_save_exit_status(data);
+	while (wait(NULL) > 0)
+	{
+	}
 	free_array(data->pipes_cmd);
 	data->pipes_cmd = NULL;
 	data->pipe_num = 1;
