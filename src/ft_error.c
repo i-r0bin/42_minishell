@@ -83,12 +83,14 @@ int	check_token_error(t_data *data)
 	token = NULL;
 	while (data->args[i])
 	{
-		if (is_token(data, i) && (!data->args[i + 1] || is_token(data, i + 1)))
+		if (is_token(data, i) && ((!data->args[i + 1] || is_token(data, i + 1)) || i == 0))
 		{
-			if (!data->args[i + 1])
-				ft_strlcpy(token, "newline", 7);
-			else if (ft_strncmp(data->args[i], "|", 2) != 0 || ft_strncmp(data->args[i + 1], "|", 2) == 0)
+			if (!data->args[i + 1] && i > 0)
+				token = ft_strjoin("", "newline");
+			else if (data->args[i + 1] && i > 0)
 				token = data->args[i + 1];
+			else
+				token = data->args[i];
 			if (token)
 			{
 				error = ft_strjoin("syntax error near unexpected token `", token);
