@@ -87,9 +87,9 @@ int	check_token_error(t_data *data)
 		{
 			if (!data->args[i + 1] && i > 0)
 				token = ft_strjoin("", "newline");
-			else if (data->args[i + 1] && i > 0)
+			else if (data->args[i + 1] && i > 0 && (ft_strncmp(data->args[i], "|", 2) != 0 || ft_strncmp(data->args[i], "<", 2) == 0))
 				token = data->args[i + 1];
-			else
+			else if (i == 0 && (ft_strncmp(data->args[i], "|", 2) == 0 || ft_strncmp(data->args[i], "<", 2) == 0))
 				token = data->args[i];
 			if (token)
 			{
