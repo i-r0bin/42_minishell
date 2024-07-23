@@ -96,7 +96,7 @@ size_t	get_line_len(char *line)
 void	format_len(char *line, int *i, size_t *len)
 {
 	char	token;
-	
+
 	token = line[*i];
 	if (*i > 0 && line[*i - 1] != ' ')
 		(*len)++;

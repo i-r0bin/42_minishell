@@ -50,53 +50,38 @@ void	split_pipes(t_data *data)
 	}
 }
 
-void	exec_pipe(t_data *data)
+void	handle_fork(t_data *data, int i, int fd[2])
 {
-	int		fd[2];
-	int		i;
+	data->pid = fork();
+	if (data->pid == -1)
+		handle_error("fork error");
+	if (data->pid == 0)
+		execute_child_process(data, i, fd);
+	else
+		set_fd_pipe(data, fd);
+}
+
+void	execute_child_process(t_data *data, int i, int fd[2])
+{
 	char	**envp;
 	t_data	child_data;
 
+	set_input_output(data, i, fd);
+	envp = env_to_array(data->env);
+	init_data(&child_data, envp);
+	child_data.line = ft_strdup(data->pipes_cmd[i]);
+	parse_line(&child_data);
+	free_data(&child_data);
+	free_array(envp);
+	exit(child_data.status);
+}
+
+void	exec_pipe(t_data *data)
+{
 	split_pipes(data);
-	i = 0;
-	while (i < data->pipe_num)
-	{
-		if (i < data->pipe_num - 1)
-		{
-			if (pipe(fd) == -1)
-			{
-				perror("pipe error");
-				exit(EXIT_FAILURE);
-			}
-		}
-		else
-		{
-			fd[0] = -1;
-			fd[1] = -1;
-		}
-		data->pid = fork();
-		if (data->pid == -1)
-		{
-			perror("fork error");
-			exit(EXIT_FAILURE);
-		}
-		if (data->pid == 0)
-		{
-			set_input_output(data, i, fd);
-			envp = env_to_array(data->env);
-			init_data(&child_data, envp);
-			child_data.line = ft_strdup(data->pipes_cmd[i]);
-			parse_line(&child_data);
-			free_data(&child_data);
-			free_array(envp);
-			exit(child_data.status);
-		}
-		else
-			set_fd_pipe(data, fd);
-		i++;
-	}
+	data->pipe_num = get_pipe_count(data->pipes_cmd);
+	handle_pipes(data);
 	wait_and_save_exit_status(data);
-	while (wait(NULL) > 0) {}
 	free_array(data->pipes_cmd);
 	data->pipes_cmd = NULL;
 	data->pipe_num = 1;

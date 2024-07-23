@@ -74,8 +74,8 @@ int	append_redirection(t_data *data, int index)
 
 int	exec_here_documents(t_data *data, int index)
 {
-	int		fd[2];
-	int		prev_fd;
+	int	fd[2];
+	int	prev_fd;
 
 	if (data->args[index + 1] == NULL)
 	{

@@ -32,8 +32,8 @@ char	*get_key_pos(char *arg)
 	i = 0;
 	while (arg[i])
 	{
-		if (arg[i] == '$' && arg[i + 1] != ' ' && arg[i + 1] != '\0'
-			&& arg[i + 1] != '\"' && arg[i + 1] != '\'')
+		if (arg[i] == '$' && arg[i + 1] != ' ' && arg[i + 1] != '\0' && arg[i
+				+ 1] != '\"' && arg[i + 1] != '\'')
 			return (arg + i);
 		i++;
 	}
@@ -51,10 +51,10 @@ char	**env_to_array(t_list *env)
 	array = (char **)malloc(sizeof(char *) * (ft_lstsize(env) + 1));
 	while (tmp)
 	{
-		if(((char **)tmp->content)[1])
+		if (((char **)tmp->content)[1])
 		{
 			array[i] = ft_strjoin(((char **)tmp->content)[0], "=");
-			if(((char **)tmp->content)[1][0])
+			if (((char **)tmp->content)[1][0])
 				array[i] = ft_append_str(array[i], ((char **)tmp->content)[1]);
 		}
 		else

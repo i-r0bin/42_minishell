@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ppezzull <ppezzull@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/23 18:02:30 by ppezzull          #+#    #+#             */
+/*   Updated: 2024/07/23 18:02:35 by ppezzull         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -60,6 +72,8 @@ int			check_dir(t_data *data, char *dir);
 // builtins
 void		ft_pwd(void);
 void		ft_cd(t_data *data);
+char		*determine_cd_path(t_data *data);
+void		handle_cd_error(t_data *data, char *path);
 void		update_pwd(t_data *data);
 void		ft_env(t_data *data);
 void		ft_unset(t_data *data);
@@ -67,6 +81,7 @@ void		ft_exit(t_data *data);
 void		ft_echo(t_data *data);
 int			newline_flag(char *arg);
 void		ft_export(t_data *data);
+int			validate_exit_args(t_data *data);
 // exec
 void		exec_cmd(t_data *data);
 void		exec_builtin(t_data *data);
@@ -100,6 +115,12 @@ void		split_pipes(t_data *data);
 void		set_input_output(t_data *data, int i, int fd[2]);
 void		set_fd_pipe(t_data *data, int fd[2]);
 void		exec_pipe_cmd(t_data *data, char *cmd);
+int			get_pipe_count(char **pipes_cmd);
+void		handle_pipes(t_data *data);
+void		handle_fork(t_data *data, int i, int fd[2]);
+void		execute_child_process(t_data *data, int i, int fd[2]);
+void		handle_error(const char *message);
+
 // redir utils
 int			input_redirection(t_data *data, int index);
 int			output_redirection(t_data *data, int index);
@@ -108,5 +129,6 @@ int			exec_here_documents(t_data *data, int index);
 void		reformat_redir_args(t_data *data, int index);
 int			check_file_permissions(char *file, int flags);
 void		exec_here_input(t_data *data, int index);
+int			handle_token_error(t_data *data, int i);
 
 #endif

@@ -75,42 +75,46 @@ int	check_dir(t_data *data, char *dir)
 
 int	check_token_error(t_data *data)
 {
-	int		i;
-	char	*token;
-	char	*error;
+	int	i;
 
 	i = 0;
-	token = NULL;
 	while (data->args[i])
 	{
-		if (is_token(data, i) && ((!data->args[i + 1] || is_token(data, i + 1)) || i == 0))
+		if (is_token(data, i))
 		{
-			if (!data->args[i + 1] && i > 0)
-				token = ft_strjoin("", "newline");
-			else if (data->args[i + 1] && i > 0 && (ft_strncmp(data->args[i], "|", 2) != 0 || ft_strncmp(data->args[i], "<", 2) == 0))
-				token = data->args[i + 1];
-			else if (i == 0 && (ft_strncmp(data->args[i], "|", 2) == 0 || ft_strncmp(data->args[i], "<", 2) == 0))
-				token = data->args[i];
-			if (token)
-			{
-				error = ft_strjoin("syntax error near unexpected token `", token);
-				error = ft_append_str(error, "\'");
-				ft_error(data, NULL, error);
-				free(token);
-				free(error);
+			if (handle_token_error(data, i))
 				return (1);
-			}
 		}
 		i++;
 	}
 	return (0);
 }
 
-int	is_token(t_data *data, int i)
+int	handle_token_error(t_data *data, int i)
 {
-	if (ft_strncmp(data->args[i], ">", 2) == 0 || ft_strncmp(data->args[i], ">>", 3) == 0
-	|| ft_strncmp(data->args[i], "<", 2) == 0 || ft_strncmp(data->args[i], "<<", 3) == 0
-	|| ft_strncmp(data->args[i], "|", 2) == 0)
+	char	*token;
+	char	*error;
+
+	token = NULL;
+	if ((!data->args[i + 1] || is_token(data, i + 1)) || i == 0)
+	{
+		if (!data->args[i + 1] && i > 0)
+			token = ft_strjoin("", "newline");
+		else if (data->args[i + 1] && i > 0 && (ft_strncmp(data->args[i], "|",
+					2) != 0 || ft_strncmp(data->args[i], "<", 2) == 0))
+			token = data->args[i + 1];
+		else if (i == 0 && (ft_strncmp(data->args[i], "|", 2) == 0
+				|| ft_strncmp(data->args[i], "<", 2) == 0))
+			token = data->args[i];
+		if (token)
+		{
+			error = ft_strjoin("syntax error near unexpected token `", token);
+			error = ft_append_str(error, "\'");
+			ft_error(data, NULL, error);
+			free(token);
+			free(error);
 			return (1);
+		}
+	}
 	return (0);
 }

@@ -21,38 +21,6 @@ void	ft_pwd(void)
 	free(cwd);
 }
 
-void	ft_cd(t_data *data)
-{
-	char	*path;
-	char	*tmp;
-
-	if (data->args[1] && data->args[2])
-	{
-		data->status = 1;
-		ft_error(data, data->args[0], "too many arguments");
-		return ;
-	}
-	else if (data->args[1] && ft_strncmp(data->args[1], "-", 2) == 0
-		&& get_env("$OLDPWD", data))
-		path = get_env("$OLDPWD", data);
-	else if (data->args[1] && ft_strncmp(data->args[1], "~", 2) != 0
-		&& ft_strncmp(data->args[1], "-", 2) != 0)
-		path = data->args[1];
-	if (!data->args[1] || (ft_strncmp(data->args[1], "~", 2) == 0
-			|| (ft_strncmp(data->args[1], "-", 2) == 0
-				&& !get_env("$OLDPWD", data))))
-		path = get_env("$HOME", data);
-	if (chdir(path) == -1)
-	{
-		data->status = 1;
-		tmp = ft_strjoin("cd: ", path);
-		ft_error(data, tmp, "No such file or directory");
-		free(tmp);
-		return ;
-	}
-	update_pwd(data);
-}
-
 void	ft_env(t_data *data)
 {
 	t_list	*tmp;
@@ -91,10 +59,10 @@ void	ft_unset(t_data *data)
 	}
 }
 
-void	ft_exit(t_data *data)
+int	validate_exit_args(t_data *data)
 {
 	int	status;
-	
+
 	status = 0;
 	if (data->args[1])
 	{
@@ -111,12 +79,20 @@ void	ft_exit(t_data *data)
 		else
 		{
 			status = ft_atoi(data->args[1]);
-			free_data(data);
-			ft_putendl_fd("exit", 1);
-			exit(status);
 		}
 	}
-	free_data(data);
-	ft_putendl_fd("exit", 1);
-	exit(status);
+	return (status);
+}
+
+void	ft_exit(t_data *data)
+{
+	int	status;
+
+	status = validate_exit_args(data);
+	if (status != 1)
+	{
+		free_data(data);
+		ft_putendl_fd("exit", 1);
+		exit(status);
+	}
 }

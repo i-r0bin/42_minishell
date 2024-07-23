@@ -19,3 +19,19 @@ int	check_quote(const char *line, int index, int open, char quote)
 		return (1);
 	return (0);
 }
+
+void	handle_error(const char *message)
+{
+	perror(message);
+	exit(EXIT_FAILURE);
+}
+
+int	is_token(t_data *data, int i)
+{
+	if (ft_strncmp(data->args[i], ">", 2) == 0 || ft_strncmp(data->args[i],
+			">>", 3) == 0 || ft_strncmp(data->args[i], "<", 2) == 0
+		|| ft_strncmp(data->args[i], "<<", 3) == 0 || ft_strncmp(data->args[i],
+			"|", 2) == 0)
+		return (1);
+	return (0);
+}

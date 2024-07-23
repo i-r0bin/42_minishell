@@ -66,3 +66,36 @@ void	exec_pipe_cmd(t_data *data, char *cmd)
 			exec_builtin(data);
 	}
 }
+
+int	get_pipe_count(char **pipes_cmd)
+{
+	int	count;
+
+	count = 0;
+	while (pipes_cmd[count])
+		count++;
+	return (count);
+}
+
+void	handle_pipes(t_data *data)
+{
+	int	i;
+	int	fd[2];
+
+	i = 0;
+	while (i < data->pipe_num)
+	{
+		if (i < data->pipe_num - 1)
+		{
+			if (pipe(fd) == -1)
+				handle_error("pipe error");
+		}
+		else
+		{
+			fd[0] = -1;
+			fd[1] = -1;
+		}
+		handle_fork(data, i, fd);
+		i++;
+	}
+}

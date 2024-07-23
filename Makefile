@@ -27,6 +27,7 @@ SRC = \
 	$Sreplace_env.c \
 	$Scheck_bin.c \
 	$Spipe.c \
+	$Sft_cd.c \
 
 OBJ = $(SRC:$S%.c=$O%.o)
 
