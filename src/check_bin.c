@@ -6,7 +6,7 @@
 /*   By: rilliano <rilliano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 03:22:37 by ppezzull          #+#    #+#             */
-/*   Updated: 2024/07/23 15:17:00 by rilliano         ###   ########.fr       */
+/*   Updated: 2024/07/23 16:30:35 by rilliano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	check_bin(t_data *data)
 	struct stat	path_stat;
 
 	if ((data->args[0][0] == '.' && data->args[0][1] == '/')
-		|| data->args[0][0] == '/')
+		|| data->args[0][0] == '/' || !get_env("PATH", data))
 	{
 		return (check_file_status(data, &path_stat));
 	}

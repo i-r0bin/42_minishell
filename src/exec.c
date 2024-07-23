@@ -6,7 +6,7 @@
 /*   By: rilliano <rilliano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 03:22:37 by ppezzull          #+#    #+#             */
-/*   Updated: 2024/07/23 15:38:15 by rilliano         ###   ########.fr       */
+/*   Updated: 2024/07/23 16:33:02 by rilliano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,11 +38,6 @@ void	exec_bin(t_data *data)
 	char	**envp;
 	int		err;
 
-	if (!get_env("PATH", data))
-	{
-		ft_error(data, data->args[0], "command not found");
-		return ;
-	}
 	if (check_bin(data))
 		return ;
 	err = 0;

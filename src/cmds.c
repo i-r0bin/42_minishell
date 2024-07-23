@@ -6,7 +6,7 @@
 /*   By: rilliano <rilliano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 03:22:37 by ppezzull          #+#    #+#             */
-/*   Updated: 2024/07/23 14:49:18 by rilliano         ###   ########.fr       */
+/*   Updated: 2024/07/23 16:32:46 by rilliano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,12 @@ void	ft_pwd(void)
 void	ft_cd(t_data *data)
 {
 	char	*path;
+	char	*tmp;
 
 	if (data->args[1] && data->args[2])
 	{
-		ft_error(data, NULL, "too many arguments");
+		data->status = 1;
+		ft_error(data, data->args[0], "too many arguments");
 		return ;
 	}
 	else if (data->args[1] && ft_strncmp(data->args[1], "-", 2) == 0
@@ -42,7 +44,10 @@ void	ft_cd(t_data *data)
 		path = get_env("$HOME", data);
 	if (chdir(path) == -1)
 	{
-		ft_error(data, path, "No such file or directory");
+		data->status = 1;
+		tmp = ft_strjoin("cd: ", path);
+		ft_error(data, tmp, "No such file or directory");
+		free(tmp);
 		return ;
 	}
 	update_pwd(data);
@@ -52,6 +57,12 @@ void	ft_env(t_data *data)
 {
 	t_list	*tmp;
 
+	if (data->args[1])
+	{
+		data->status = 1;
+		ft_error(data, data->args[0], "too many arguments");
+		return ;
+	}
 	tmp = data->env;
 	while (tmp)
 	{
