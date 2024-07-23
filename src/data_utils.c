@@ -6,7 +6,7 @@
 /*   By: rilliano <rilliano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 03:22:37 by ppezzull          #+#    #+#             */
-/*   Updated: 2024/07/22 19:55:54 by rilliano         ###   ########.fr       */
+/*   Updated: 2024/07/23 14:45:43 by rilliano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ void	init_data(t_data *data, char **env)
 	data->fd_pipe[1] = -1;
 	data->status = 0;
 	data->pid = 0;
-	data->exit = 0;
 }
 
 void	parse_line(t_data *data)

@@ -26,7 +26,6 @@ typedef struct s_data
 	int		fd_pipe[2];
 	int		status;
 	pid_t	pid;
-	int		exit;
 }			t_data;
 
 void		init_data(t_data *data, char **env);
@@ -75,6 +74,7 @@ void		exec_redirection(t_data *data);
 void		exec_pipe(t_data *data);
 void		exec_bin(t_data *data);
 int			exec_bin_path(t_data *data, char **paths, char **envp);
+int			exec_bin_with_path(t_data *data, char **envp);
 // envp utils
 void		data_env_format(t_data *data);
 void		replace_env(t_data *data, int arg_index, char *key_pos, char *env);

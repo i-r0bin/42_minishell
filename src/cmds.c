@@ -6,7 +6,7 @@
 /*   By: rilliano <rilliano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 03:22:37 by ppezzull          #+#    #+#             */
-/*   Updated: 2024/07/22 18:00:57 by rilliano         ###   ########.fr       */
+/*   Updated: 2024/07/23 14:49:18 by rilliano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,23 +82,30 @@ void	ft_unset(t_data *data)
 
 void	ft_exit(t_data *data)
 {
+	int	status;
+	
+	status = 0;
 	if (data->args[1])
 	{
 		if (data->args[2])
 		{
 			ft_error(data, NULL, "too many arguments");
-			data->status = 1;
+			status = 1;
 		}
 		else if (!ft_isnumber(data->args[1]))
 		{
 			ft_error(data, data->args[1], "numeric argument required");
-			data->status = 2;
+			status = 2;
 		}
 		else
 		{
-			data->status = ft_atoi(data->args[1]);
-			exit(data->status);
+			status = ft_atoi(data->args[1]);
+			free_data(data);
+			ft_putendl_fd("exit", 1);
+			exit(status);
 		}
 	}
-	data->exit = 1;
+	free_data(data);
+	ft_putendl_fd("exit", 1);
+	exit(status);
 }

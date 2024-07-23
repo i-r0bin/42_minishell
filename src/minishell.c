@@ -6,7 +6,7 @@
 /*   By: rilliano <rilliano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 03:22:37 by ppezzull          #+#    #+#             */
-/*   Updated: 2024/07/22 15:01:48 by rilliano         ###   ########.fr       */
+/*   Updated: 2024/07/23 14:46:11 by rilliano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	main(int ac, char **av, char **env)
 	init_data(&data, env);
 	signal(SIGINT, signal_handler);
 	signal(SIGQUIT, SIG_IGN);
-	while (data.exit == 0)
+	while (1)
 	{
 		data.line = readline("minishell$ ");
 		if (!data.line)
@@ -34,9 +34,6 @@ int	main(int ac, char **av, char **env)
 		}
 		free(data.line);
 	}
-	free_data(&data);
-	ft_putendl_fd("exit", 1);
-	exit(data.status);
 	return (0);
 }
 

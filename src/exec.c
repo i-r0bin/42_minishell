@@ -6,7 +6,7 @@
 /*   By: rilliano <rilliano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 03:22:37 by ppezzull          #+#    #+#             */
-/*   Updated: 2024/07/22 16:58:04 by rilliano         ###   ########.fr       */
+/*   Updated: 2024/07/23 15:38:15 by rilliano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,10 @@ void	exec_bin(t_data *data)
 	err = 0;
 	paths = ft_split(get_env("PATH", data), ':');
 	envp = env_to_array(data->env);
-	if (execve(data->args[0], data->args, envp) == -1)
+	if ((data->args[0][0] == '.' && data->args[0][1] == '/')
+		|| data->args[0][0] == '/')
+		err = exec_bin_with_path(data, envp);
+	else if (execve(data->args[0], data->args, envp) == -1)
 		err = exec_bin_path(data, paths, envp);
 	free_array(envp);
 	if (!err)
@@ -57,6 +60,21 @@ void	exec_bin(t_data *data)
 		data->status = 127;
 	}
 	free_array(paths);
+}
+
+int	exec_bin_with_path(t_data *data, char **envp)
+{
+	data->pid = fork();
+	if (data->pid == 0)
+	{
+		execve(data->args[0], data->args, envp);
+		WIFEXITED(data->status);
+		exit(data->status);
+	}
+	wait_and_save_exit_status(data);
+	if (data->status == 0)
+		return (1);
+	return (0);
 }
 
 int	exec_bin_path(t_data *data, char **paths, char **envp)
