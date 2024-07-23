@@ -6,7 +6,7 @@
 /*   By: rilliano <rilliano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 03:22:37 by ppezzull          #+#    #+#             */
-/*   Updated: 2024/07/23 14:45:43 by rilliano         ###   ########.fr       */
+/*   Updated: 2024/07/23 15:47:53 by rilliano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,13 @@ void	init_data(t_data *data, char **env)
 
 void	parse_line(t_data *data)
 {
+	int	i;
+
+	i = 0;
+	while (data->line[i] == ' ')
+		i++;
+	if (!data->line[i])
+		return ;
 	data->cmd = ft_strtrim(data->line, " ");
 	data->cmd = token_format(data->cmd);
 	if (data->cmd && data->cmd[0])
