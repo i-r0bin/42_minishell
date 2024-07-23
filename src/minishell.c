@@ -6,7 +6,7 @@
 /*   By: rilliano <rilliano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 03:22:37 by ppezzull          #+#    #+#             */
-/*   Updated: 2024/07/23 17:16:20 by rilliano         ###   ########.fr       */
+/*   Updated: 2024/07/23 20:09:43 by rilliano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	main(int ac, char **av, char **env)
 	(void)av;
 	init_data(&data, env);
 	signal(SIGINT, signal_handler);
-	signal(SIGQUIT, signal_handler);
+	signal(SIGQUIT, SIG_IGN);
 	while (1)
 	{
 		data.line = readline("minishell$ ");
@@ -51,16 +51,5 @@ void	signal_handler(int signum)
 			rl_replace_line("", 0);
 			rl_redisplay();
 		}
-	}
-	else if (signum == SIGQUIT)
-	{
-		signal(SIGQUIT, SIG_IGN);
-		if (wait(NULL) >= 0)
-		{
-			ft_putendl_fd("Quit (core dumped)", 1);
-			signal(SIGQUIT, SIG_DFL);
-			raise(SIGQUIT);
-		}
-		signal(SIGQUIT, SIG_IGN);
 	}
 }
