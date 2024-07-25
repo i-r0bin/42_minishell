@@ -60,6 +60,8 @@ void	exec_cmd(t_data *data)
 	i = 0;
 	redir = 0;
 	pipe = 0;
+	if (!data->args || !data->args[0])
+		return ;
 	while (data->args[i])
 	{
 		if (is_token(data, i) && ft_strncmp(data->args[i], "|", 2) != 0)
@@ -85,6 +87,8 @@ void	wait_and_save_exit_status(t_data *data)
 
 void	free_data(t_data *data)
 {
+	if (data->line)
+		free(data->line);
 	if (data->cmd)
 		free(data->cmd);
 	if (data->args)

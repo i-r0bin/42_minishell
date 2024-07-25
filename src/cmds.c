@@ -59,6 +59,19 @@ void	ft_unset(t_data *data)
 	}
 }
 
+void	ft_exit(t_data *data)
+{
+	int	status;
+
+	status = validate_exit_args(data);
+	if (status != 1)
+	{
+		free_data(data);
+		ft_putendl_fd("exit", 1);
+		exit(status);
+	}
+}
+
 int	validate_exit_args(t_data *data)
 {
 	int	status;
@@ -82,17 +95,4 @@ int	validate_exit_args(t_data *data)
 		}
 	}
 	return (status);
-}
-
-void	ft_exit(t_data *data)
-{
-	int	status;
-
-	status = validate_exit_args(data);
-	if (status != 1)
-	{
-		free_data(data);
-		ft_putendl_fd("exit", 1);
-		exit(status);
-	}
 }

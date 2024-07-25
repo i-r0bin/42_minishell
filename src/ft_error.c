@@ -98,18 +98,18 @@ int	handle_token_error(t_data *data, int i)
 	token = NULL;
 	if ((!data->args[i + 1] || is_token(data, i + 1)) || i == 0)
 	{
-		if (!data->args[i + 1] && i > 0)
-			token = ft_strjoin("", "newline");
-		else if (data->args[i + 1] && i > 0 && (ft_strncmp(data->args[i], "|",
-					2) != 0 || ft_strncmp(data->args[i], "<", 2) == 0))
-			token = data->args[i + 1];
-		else if (i == 0 && (ft_strncmp(data->args[i], "|", 2) == 0
-				|| ft_strncmp(data->args[i], "<", 2) == 0))
-			token = data->args[i];
+		if (!data->args[i + 1] && (i > 0 || (i == 0
+					&& ft_strncmp(data->args[i], "|", 2) != 0)))
+			token = ft_strjoin("newline", "\'");
+		else if (ft_strncmp(data->args[i], "|", 2) == 0 && ((data->args[i + 1]
+					&& ft_strncmp(data->args[i + 1], "|", 2) == 0) || i == 0))
+			token = ft_strjoin(ft_strdup(data->args[i]), "\'");
+		else if (ft_strncmp(data->args[i], "|", 2) != 0
+			&& data->args[i + 1] && is_token(data, i + 1))
+			token = ft_strjoin(ft_strdup(data->args[i + 1]), "\'");
 		if (token)
 		{
 			error = ft_strjoin("syntax error near unexpected token `", token);
-			error = ft_append_str(error, "\'");
 			ft_error(data, NULL, error);
 			free(token);
 			free(error);

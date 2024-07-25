@@ -20,7 +20,7 @@ int	check_quote(const char *line, int index, int open, char quote)
 	return (0);
 }
 
-void	handle_error(const char *message)
+void	handle_pipe_error(const char *message)
 {
 	perror(message);
 	exit(EXIT_FAILURE);

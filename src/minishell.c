@@ -32,7 +32,7 @@ int	main(int ac, char **av, char **env)
 			if (data.cmd && data.cmd[0])
 				add_history(data.line);
 		}
-		free(data.line);
+		reset_data(&data);
 	}
 	free_data(&data);
 	ft_putendl_fd("exit", 1);
@@ -52,4 +52,17 @@ void	signal_handler(int signum)
 			rl_redisplay();
 		}
 	}
+}
+
+void	reset_data(t_data *data)
+{
+	if (data->line)
+		free(data->line);
+	if (data->cmd)
+		free(data->cmd);
+	if (data->args)
+		free_array(data->args);
+	data->line = NULL;
+	data->cmd = NULL;
+	data->args = NULL;
 }

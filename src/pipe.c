@@ -54,7 +54,7 @@ void	handle_fork(t_data *data, int i, int fd[2])
 {
 	data->pid = fork();
 	if (data->pid == -1)
-		handle_error("fork error");
+		handle_pipe_error("fork error");
 	if (data->pid == 0)
 		execute_child_process(data, i, fd);
 	else

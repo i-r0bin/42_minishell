@@ -78,7 +78,7 @@ int	envcmp(const char *s, const char *env)
 		i++;
 	}
 	if (s[i] != '\0' && s[i] != ' ' && s[i] != '/' && s[i] != '\"'
-		&& s[i] != '-')
+		&& s[i] != '\'' && s[i] != '-')
 		return ((unsigned char)s[i] - (unsigned char)env[i]);
 	return (0);
 }

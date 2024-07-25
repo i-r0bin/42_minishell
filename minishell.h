@@ -43,6 +43,7 @@ typedef struct s_data
 void		init_data(t_data *data, char **env);
 void		parse_line(t_data *data);
 // data utils
+void		reset_data(t_data *data);
 void		free_data(t_data *data);
 void		free_array(char **array);
 void		free_env_node(void *env);
@@ -119,7 +120,7 @@ int			get_pipe_count(char **pipes_cmd);
 void		handle_pipes(t_data *data);
 void		handle_fork(t_data *data, int i, int fd[2]);
 void		execute_child_process(t_data *data, int i, int fd[2]);
-void		handle_error(const char *message);
+void		handle_pipe_error(const char *message);
 
 // redir utils
 int			input_redirection(t_data *data, int index);

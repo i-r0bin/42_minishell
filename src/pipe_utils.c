@@ -88,7 +88,7 @@ void	handle_pipes(t_data *data)
 		if (i < data->pipe_num - 1)
 		{
 			if (pipe(fd) == -1)
-				handle_error("pipe error");
+				handle_pipe_error("pipe error");
 		}
 		else
 		{
