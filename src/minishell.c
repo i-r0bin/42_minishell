@@ -54,15 +54,9 @@ void	signal_handler(int signum)
 	}
 }
 
-void	reset_data(t_data *data)
+void	wait_and_save_exit_status(t_data *data)
 {
-	if (data->line)
-		free(data->line);
-	if (data->cmd)
-		free(data->cmd);
-	if (data->args)
-		free_array(data->args);
-	data->line = NULL;
-	data->cmd = NULL;
-	data->args = NULL;
+	waitpid(data->pid, &data->status, 0);
+	if (WIFEXITED(data->status))
+		data->status = WEXITSTATUS(data->status);
 }

@@ -12,6 +12,44 @@
 
 #include "minishell.h"
 
+void	split_pipes(t_data *data)
+{
+	int	len;
+	int	i;
+
+	get_pipe_len(data);
+	data->pipes_cmd = ft_calloc(data->pipe_num + 1, sizeof(char *));
+	i = 0;
+	len = 0;
+	while (data->args[i])
+	{
+		if (ft_strncmp(data->args[i], "|", 2) == 0 && i > 0)
+			len++;
+		else if (!data->pipes_cmd[len])
+			data->pipes_cmd[len] = ft_strdup(data->args[i]);
+		else
+		{
+			data->pipes_cmd[len] = ft_append_str(data->pipes_cmd[len], " ");
+			data->pipes_cmd[len] = ft_append_str(data->pipes_cmd[len],
+					data->args[i]);
+		}
+		i++;
+	}
+}
+
+void	get_pipe_len(t_data *data)
+{
+	int	i;
+
+	i = 0;
+	while (data->args[i])
+	{
+		if (ft_strncmp(data->args[i], "|", 2) == 0)
+			data->pipe_num++;
+		i++;
+	}
+}
+
 void	set_input_output(t_data *data, int i, int fd[2])
 {
 	if (data->fd_pipe[0] != -1)
@@ -36,66 +74,4 @@ void	set_fd_pipe(t_data *data, int fd[2])
 		close(fd[1]);
 	data->fd_pipe[0] = fd[0];
 	data->fd_pipe[1] = fd[1];
-}
-
-void	exec_pipe_cmd(t_data *data, char *cmd)
-{
-	int	i;
-	int	redir;
-
-	data->line = ft_strdup(cmd);
-	data->cmd = ft_strtrim(data->line, " ");
-	if (data->cmd && data->cmd[0])
-		data->args = split_args(data->cmd);
-	data_env_format(data);
-	if (data->args && data->args[0])
-	{
-		i = 0;
-		redir = 0;
-		while (data->args[i])
-		{
-			if ((data->args[i][0] == '<' || data->args[i][0] == '>')
-				&& (!data->args[i][1] || data->args[i][1] == '<'
-					|| data->args[i][1] == '>'))
-				redir = 1;
-			i++;
-		}
-		if (redir)
-			exec_redirection(data);
-		else
-			exec_builtin(data);
-	}
-}
-
-int	get_pipe_count(char **pipes_cmd)
-{
-	int	count;
-
-	count = 0;
-	while (pipes_cmd[count])
-		count++;
-	return (count);
-}
-
-void	handle_pipes(t_data *data)
-{
-	int	i;
-	int	fd[2];
-
-	i = 0;
-	while (i < data->pipe_num)
-	{
-		if (i < data->pipe_num - 1)
-		{
-			if (pipe(fd) == -1)
-				handle_pipe_error("pipe error");
-		}
-		else
-		{
-			fd[0] = -1;
-			fd[1] = -1;
-		}
-		handle_fork(data, i, fd);
-		i++;
-	}
 }

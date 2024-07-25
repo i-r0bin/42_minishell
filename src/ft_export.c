@@ -21,7 +21,7 @@ void	ft_export(t_data *data)
 		print_export(data);
 	while (data->args[i])
 	{
-		if (!export_error(data, data->args[i]))
+		if (!handle_export_error(data, data->args[i]))
 			set_env(((char **)data->args)[i], data, "1");
 		i++;
 	}
@@ -84,7 +84,7 @@ t_list	*get_next_sorted_var(t_list *env, char *last)
 	return (min);
 }
 
-int	export_error(t_data *data, char *arg)
+int	handle_export_error(t_data *data, char *arg)
 {
 	int	i;
 	int	error;

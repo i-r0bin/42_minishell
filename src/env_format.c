@@ -37,6 +37,14 @@ void	data_env_format(t_data *data)
 	remove_null_args(data);
 }
 
+int	check_quote(const char *line, int index, int open, char quote)
+{
+	if (line[index] == quote && !open && (line[index + 1] && ft_strchr(line
+				+ index + 1, quote)))
+		return (1);
+	return (0);
+}
+
 char	*get_quote(char *arg)
 {
 	int	i;
@@ -83,20 +91,4 @@ char	*formatted_arg_allocation(char *arg, int env_len, int key_len)
 	len = ft_strlen(arg) + env_len - key_len;
 	new_arg = ft_calloc(len + 1, sizeof(char));
 	return (new_arg);
-}
-
-void	update_pwd(t_data *data)
-{
-	char	*old_pwd;
-	char	*cwd;
-	char	*new_pwd;
-
-	old_pwd = ft_strjoin("OLDPWD=", get_env("$PWD", data));
-	set_env(old_pwd, data, "0");
-	free(old_pwd);
-	cwd = getcwd(NULL, 0);
-	new_pwd = ft_strjoin("PWD=", cwd);
-	set_env(new_pwd, data, "0");
-	free(cwd);
-	free(new_pwd);
 }

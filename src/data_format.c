@@ -12,6 +12,26 @@
 
 #include "minishell.h"
 
+void	parse_line(t_data *data)
+{
+	int	i;
+
+	i = 0;
+	while (data->line[i] == ' ')
+		i++;
+	if (!data->line[i])
+		return ;
+	data->cmd = ft_strtrim(data->line, " ");
+	data->cmd = token_format(data->cmd);
+	if (data->cmd && data->cmd[0])
+		data->args = split_args(data->cmd);
+	if (check_token_error(data))
+		return ;
+	data_env_format(data);
+	if (data->args && data->args[0])
+		exec_cmd(data);
+}
+
 char	**split_args(char const *line)
 {
 	char	**args;
@@ -101,29 +121,4 @@ int	get_null_args_num(t_data *data)
 		i++;
 	}
 	return (null_args);
-}
-
-void	remove_null_args(t_data *data)
-{
-	int		i;
-	int		j;
-	int		null_args;
-	char	**new_arr;
-
-	null_args = get_null_args_num(data);
-	if (null_args)
-	{
-		new_arr = ft_calloc(get_arr_len(data->args) - null_args + 1,
-				sizeof(char *));
-		i = 0;
-		j = 0;
-		while (data->args[i])
-		{
-			if (data->args[i][0])
-				new_arr[j++] = ft_strdup(data->args[i]);
-			i++;
-		}
-		free_array(data->args);
-		data->args = new_arr;
-	}
 }

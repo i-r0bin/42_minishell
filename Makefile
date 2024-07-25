@@ -14,20 +14,19 @@ SRC = \
 	$Senv_data.c \
 	$Senv_utils.c \
 	$Senv_format.c \
+	$Sreplace_env.c \
 	$Scmds.c \
+	$Sft_cd.c \
 	$Sft_echo.c \
 	$Sft_export.c \
 	$Sexec.c \
+	$Spipe.c \
 	$Spipe_utils.c \
+	$Sredir.c \
 	$Sredir_utils.c \
 	$Sft_error.c \
-	$Sutils.c \
-	$Sutils2.c \
-	$Sredir.c \
-	$Sreplace_env.c \
-	$Scheck_bin.c \
-	$Spipe.c \
-	$Sft_cd.c \
+	$Serror_check.c \
+	$Sutils.c
 
 OBJ = $(SRC:$S%.c=$O%.o)
 

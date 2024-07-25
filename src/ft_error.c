@@ -29,65 +29,10 @@ void	ft_error(t_data *data, char *arg, char *error)
 		data->status = 1;
 }
 
-int	ft_isnumber(char *str)
+void	handle_pipe_error(const char *message)
 {
-	int	i;
-
-	i = 0;
-	if (str[i] == '-' || str[i] == '+')
-		i++;
-	while (str[i])
-	{
-		if (!ft_isdigit(str[i]))
-			return (0);
-		i++;
-	}
-	return (1);
-}
-
-int	check_dir(t_data *data, char *dir)
-{
-	struct stat	path_stat;
-
-	if ((dir[0] == '.' && dir[1] == '/') || dir[0] == '/' || ft_isalpha(dir[0]))
-	{
-		if (stat(dir, &path_stat) != 0)
-		{
-			ft_error(data, dir, "No such file or directory");
-			data->status = 1;
-			return (data->status);
-		}
-	}
-	else if (ft_isdigit(dir[0]))
-	{
-		ft_error(data, dir, "No such file or directory");
-		data->status = 1;
-		return (data->status);
-	}
-	else if (!ft_isalpha(dir[0]) && dir[0] != '$')
-	{
-		ft_error(data, dir, "No such file or directory");
-		data->status = 2;
-		return (data->status);
-	}
-	return (0);
-}
-
-int	check_token_error(t_data *data)
-{
-	int	i;
-
-	i = 0;
-	while (data->args[i])
-	{
-		if (is_token(data, i))
-		{
-			if (handle_token_error(data, i))
-				return (1);
-		}
-		i++;
-	}
-	return (0);
+	perror(message);
+	exit(EXIT_FAILURE);
 }
 
 int	handle_token_error(t_data *data, int i)

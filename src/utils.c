@@ -12,6 +12,22 @@
 
 #include "minishell.h"
 
+int	ft_isnumber(char *str)
+{
+	int	i;
+
+	i = 0;
+	if (str[i] == '-' || str[i] == '+')
+		i++;
+	while (str[i])
+	{
+		if (!ft_isdigit(str[i]))
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
 int	get_arr_len(char **arr)
 {
 	int	i;
@@ -43,12 +59,6 @@ void	free_array(char **array)
 			free(*tmp++);
 		free(array);
 	}
-}
-
-void	free_env_node(void *env)
-{
-	free_env_content(env);
-	free(env);
 }
 
 void	free_env_content(void *content)

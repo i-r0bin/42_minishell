@@ -12,6 +12,34 @@
 
 #include "minishell.h"
 
+void	exec_redirection(t_data *data)
+{
+	int	i;
+	int	res;
+
+	i = 0;
+	res = 0;
+	while (data->args[i])
+	{
+		if (ft_strncmp(data->args[i], ">", 2) == 0)
+			res = output_redirection(data, i);
+		else if (ft_strncmp(data->args[i], ">>", 3) == 0)
+			res = append_redirection(data, i);
+		else if (ft_strncmp(data->args[i], "<", 2) == 0)
+		{
+			if (check_dir(data, data->args[i + 1]))
+				return ;
+			res = input_redirection(data, i);
+			return ;
+		}
+		else if (ft_strncmp(data->args[i], "<<", 3) == 0)
+			res = exec_here_documents(data, i);
+		if (res != 0)
+			return ;
+		i++;
+	}
+}
+
 int	input_redirection(t_data *data, int index)
 {
 	int	fd;

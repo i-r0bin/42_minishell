@@ -31,58 +31,17 @@ void	init_data(t_data *data, char **env)
 	data->pid = 0;
 }
 
-void	parse_line(t_data *data)
+void	reset_data(t_data *data)
 {
-	int	i;
-
-	i = 0;
-	while (data->line[i] == ' ')
-		i++;
-	if (!data->line[i])
-		return ;
-	data->cmd = ft_strtrim(data->line, " ");
-	data->cmd = token_format(data->cmd);
-	if (data->cmd && data->cmd[0])
-		data->args = split_args(data->cmd);
-	if (check_token_error(data))
-		return ;
-	data_env_format(data);
-	if (data->args && data->args[0])
-		exec_cmd(data);
-}
-
-void	exec_cmd(t_data *data)
-{
-	int	i;
-	int	redir;
-	int	pipe;
-
-	i = 0;
-	redir = 0;
-	pipe = 0;
-	if (!data->args || !data->args[0])
-		return ;
-	while (data->args[i])
-	{
-		if (is_token(data, i) && ft_strncmp(data->args[i], "|", 2) != 0)
-			redir = 1;
-		else if (ft_strncmp(data->args[i], "|", 2) == 0)
-			pipe = 1;
-		i++;
-	}
-	if (pipe)
-		exec_pipe(data);
-	else if (redir)
-		exec_redirection(data);
-	else
-		exec_builtin(data);
-}
-
-void	wait_and_save_exit_status(t_data *data)
-{
-	waitpid(data->pid, &data->status, 0);
-	if (WIFEXITED(data->status))
-		data->status = WEXITSTATUS(data->status);
+	if (data->line)
+		free(data->line);
+	if (data->cmd)
+		free(data->cmd);
+	if (data->args)
+		free_array(data->args);
+	data->line = NULL;
+	data->cmd = NULL;
+	data->args = NULL;
 }
 
 void	free_data(t_data *data)
@@ -100,4 +59,35 @@ void	free_data(t_data *data)
 	}
 	if (data->pipes_cmd)
 		free_array(data->pipes_cmd);
+}
+
+void	remove_null_args(t_data *data)
+{
+	int		i;
+	int		j;
+	int		null_args;
+	char	**new_arr;
+
+	null_args = get_null_args_num(data);
+	if (null_args)
+	{
+		new_arr = ft_calloc(get_arr_len(data->args) - null_args + 1,
+				sizeof(char *));
+		i = 0;
+		j = 0;
+		while (data->args[i])
+		{
+			if (data->args[i][0])
+				new_arr[j++] = ft_strdup(data->args[i]);
+			i++;
+		}
+		free_array(data->args);
+		data->args = new_arr;
+	}
+}
+
+void	free_env_node(void *env)
+{
+	free_env_content(env);
+	free(env);
 }

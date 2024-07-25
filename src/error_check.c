@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   check_bin.c                                        :+:      :+:    :+:   */
+/*   error_check.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rilliano <rilliano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -11,6 +11,61 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	check_dir(t_data *data, char *dir)
+{
+	struct stat	path_stat;
+
+	if ((dir[0] == '.' && dir[1] == '/') || dir[0] == '/' || ft_isalpha(dir[0]))
+	{
+		if (stat(dir, &path_stat) != 0)
+		{
+			ft_error(data, dir, "No such file or directory");
+			data->status = 1;
+			return (data->status);
+		}
+	}
+	else if (ft_isdigit(dir[0]))
+	{
+		ft_error(data, dir, "No such file or directory");
+		data->status = 1;
+		return (data->status);
+	}
+	else if (!ft_isalpha(dir[0]) && dir[0] != '$')
+	{
+		ft_error(data, dir, "No such file or directory");
+		data->status = 2;
+		return (data->status);
+	}
+	return (0);
+}
+
+int	check_token_error(t_data *data)
+{
+	int	i;
+
+	i = 0;
+	while (data->args[i])
+	{
+		if (is_token(data, i))
+		{
+			if (handle_token_error(data, i))
+				return (1);
+		}
+		i++;
+	}
+	return (0);
+}
+
+int	is_token(t_data *data, int i)
+{
+	if (ft_strncmp(data->args[i], ">", 2) == 0 || ft_strncmp(data->args[i],
+			">>", 3) == 0 || ft_strncmp(data->args[i], "<", 2) == 0
+		|| ft_strncmp(data->args[i], "<<", 3) == 0 || ft_strncmp(data->args[i],
+			"|", 2) == 0)
+		return (1);
+	return (0);
+}
 
 int	check_file_status(t_data *data, struct stat *path_stat)
 {

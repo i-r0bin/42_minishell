@@ -82,3 +82,19 @@ int	envcmp(const char *s, const char *env)
 		return ((unsigned char)s[i] - (unsigned char)env[i]);
 	return (0);
 }
+
+void	update_pwd(t_data *data)
+{
+	char	*old_pwd;
+	char	*cwd;
+	char	*new_pwd;
+
+	old_pwd = ft_strjoin("OLDPWD=", get_env("$PWD", data));
+	set_env(old_pwd, data, "0");
+	free(old_pwd);
+	cwd = getcwd(NULL, 0);
+	new_pwd = ft_strjoin("PWD=", cwd);
+	set_env(new_pwd, data, "0");
+	free(cwd);
+	free(new_pwd);
+}
